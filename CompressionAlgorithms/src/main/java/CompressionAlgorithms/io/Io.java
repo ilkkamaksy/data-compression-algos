@@ -1,12 +1,11 @@
 package CompressionAlgorithms.io;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.DataInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Scanner;
 
 /**
  * The class responsible for file IO operations.
@@ -20,8 +19,21 @@ public class Io {
      * @return fileContent String
      */
     public static String readFile(String fileNameFullPath) {
-        File file = new File(fileNameFullPath);
-        String fileContent = readFileContent(file);
+       
+        String fileContent = null;
+        
+        try {
+            DataInputStream reader = new DataInputStream(new FileInputStream(fileNameFullPath));
+            int nBytesToRead = reader.available();
+            if(nBytesToRead > 0) {
+                byte[] bytes = new byte[nBytesToRead];
+                reader.read(bytes);
+                fileContent = new String(bytes);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        } 
+
         return fileContent;
     }
     
@@ -44,21 +56,4 @@ public class Io {
         
     }
     
-    private static String readFileContent(File file) {
-        
-        StringBuilder data = new StringBuilder();
-        
-        try {
-            Scanner reader = new Scanner(file);
-            while (reader.hasNextLine()) {
-              data.append(reader.nextLine());
-            }
-            reader.close();
-
-        } catch (FileNotFoundException e) {
-            System.out.println(e.getMessage());
-        } 
-        
-        return data.toString();
-    }
 }
