@@ -9,8 +9,8 @@ import java.io.IOException;
  * Class responsible for application logic. 
  */
 public class AppService {
-    File selectedFile;
-    File lastSavedFile;
+    File selectedFile = null;
+    File lastSavedFile = null;
     String actionStatus = "";
 
     /**

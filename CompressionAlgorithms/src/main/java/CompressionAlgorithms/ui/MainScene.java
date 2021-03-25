@@ -58,7 +58,7 @@ public class MainScene {
         actionStatus.setFont(Font.font("Calibri", FontWeight.NORMAL, 16));
         actionStatus.setFill(Color.GRAY);
 
-        Button compressFileBtn = new Button("Compress selected file");
+        Button compressFileBtn = new Button("Compress");
         compressFileBtn.setOnAction(new SaveButtonListener());
         HBox compressFileBtnContainer = new HBox(10);
         compressFileBtnContainer.setAlignment(Pos.CENTER);
