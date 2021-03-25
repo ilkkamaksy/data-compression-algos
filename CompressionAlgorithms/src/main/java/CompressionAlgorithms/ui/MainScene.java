@@ -117,30 +117,9 @@ public class MainScene {
         fileChooser.setTitle("Save as...");
         fileChooser.setInitialFileName(this.appService.getSelectedFile().getName());
         File savedFile = fileChooser.showSaveDialog(savedStage);
-
-        if (savedFile != null) {
-
-            try {
-                saveFileRoutine(savedFile);
-            } catch(IOException e) {
-
-                e.printStackTrace();
-                actionStatus.setText("An ERROR occurred while saving the file!" +
-                                savedFile.toString());
-                return;
-            }
-
-            actionStatus.setText("File saved: " + savedFile.toString());
-        } else {
-            actionStatus.setText("File save cancelled.");
-        }
+        
+        this.appService.saveFile(savedFile);
+        this.actionStatus.setText(this.appService.getActionStatus());
     }
     
-    private void saveFileRoutine(File file) throws IOException {
-        String txt = txtArea.getText();
-        file.createNewFile();
-        FileWriter writer = new FileWriter(file);
-        writer.write(txt);
-        writer.close();
-    }
 }

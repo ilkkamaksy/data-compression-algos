@@ -1,7 +1,9 @@
 package CompressionAlgorithms.io;
 
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,23 +39,18 @@ public class Io {
         return fileContent;
     }
     
-     /**
-     * Write a given text string to a given file location.
+     
+    /**
+     * Write a given content to a given file location.
      * 
+     * @param file File
      * @param content String
-     * @param fileNameFullPath String
      */
-    public static void writeToFile(String content, String fileNameFullPath) {
-        
-        try {
-            Path path = Paths.get(fileNameFullPath);
-            byte[] strToBytes = content.getBytes();
-            Files.write(path, strToBytes);    
-            
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-        
+    public static void saveFile(File file, String content) throws IOException {
+        file.createNewFile();
+        FileWriter writer = new FileWriter(file);
+        writer.write(content);
+        writer.close();
     }
     
 }
