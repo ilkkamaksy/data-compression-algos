@@ -25,7 +25,7 @@ public class Io {
         try {
             DataInputStream reader = new DataInputStream(new FileInputStream(fileNameFullPath));
             int nBytesToRead = reader.available();
-            if(nBytesToRead > 0) {
+            if (nBytesToRead > 0) {
                 byte[] bytes = new byte[nBytesToRead];
                 reader.read(bytes);
                 fileContent = new String(bytes);

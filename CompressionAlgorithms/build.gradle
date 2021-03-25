@@ -1,17 +1,29 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
-apply plugin: 'checkstyle'
-apply plugin: 'application'
-
-
-mainClassName = 'CompressionAlgorithms.Main'
+plugins {
+  id 'application'
+  id 'java'
+  id 'jacoco'
+  id 'checkstyle'
+  id 'org.openjfx.javafxplugin' version '0.0.9'
+}
 
 repositories {
+    mavenCentral()
     jcenter()
 }
 
 dependencies {
     testCompile 'junit:junit:4.12'
+}
+
+javafx {
+    version = "13"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
+}
+
+mainClassName = 'CompressionAlgorithms.Main'
+
+checkstyle {
+    configDir = file("$rootProject.projectDir/config")  
 }
 
 jacocoTestReport {
