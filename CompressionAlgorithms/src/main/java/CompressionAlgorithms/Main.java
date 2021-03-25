@@ -5,8 +5,7 @@
  */
 package CompressionAlgorithms;
 
-import CompressionAlgorithms.ui.MainScene;
-import CompressionAlgorithms.io.Io;
+import CompressionAlgorithms.ui.Launcher;
 
 /**
  *
@@ -26,7 +25,8 @@ public class Main {
 //            return;
 //        }
 
-        MainScene.init(args);        
+        
+        Launcher.run(args);        
         
 //        String sourceFilePath = args[0];
 //        String destinationFilePath = args[1];

@@ -1,6 +1,6 @@
 package CompressionAlgorithms.ui;
 
-import javafx.application.Application;
+import CompressionAlgorithms.domain.AppService;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.Scene;
@@ -22,19 +22,21 @@ import java.io.IOException;
 import javafx.scene.control.TextArea;
 
 
-public class MainScene extends Application {
+public class MainScene {
+    
+    private AppService appService;
     private Text actionStatus;
     private Stage savedStage;
     private static final String SceneTitleText = "Compression with Huffman and LZW";
-    private static final String defaultFileName = "MyFile.txt";
-    private TextArea txtArea;
     
-    public static void init(String [] args) {
-        Application.launch(args);
+    private TextArea txtArea;
+
+    public MainScene(AppService appService) {
+        this.appService = appService;
     }
     
-    @Override
-    public void start(Stage primaryStage) {
+    
+    public void initializeStage(Stage primaryStage) {
 
         primaryStage.setTitle(SceneTitleText);	
 
@@ -94,7 +96,9 @@ public class MainScene extends Application {
 
         FileChooser fileChooser = new FileChooser();
         File selectedFile = fileChooser.showOpenDialog(null);
-
+        
+        this.appService.setSelectedFile(selectedFile);
+        
         if (selectedFile != null) {
             actionStatus.setText("File selected: " + selectedFile.getName());
             actionStatus.setFill(Color.GREEN);
@@ -103,13 +107,15 @@ public class MainScene extends Application {
             actionStatus.setText("No file selected");
             actionStatus.setFill(Color.GRAY);
         }
+        
+        
     }
     
     private void showSaveFileChooser() {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as...");
-        fileChooser.setInitialFileName(defaultFileName);
+        fileChooser.setInitialFileName(this.appService.getSelectedFile().getName());
         File savedFile = fileChooser.showSaveDialog(savedStage);
 
         if (savedFile != null) {

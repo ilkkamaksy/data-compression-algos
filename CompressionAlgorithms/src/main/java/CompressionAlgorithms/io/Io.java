@@ -18,7 +18,7 @@ public class Io {
      * @param fileNameFullPath String
      * @return fileContent String
      */
-    public static String readFile(String fileNameFullPath) {
+    public static String readFileContent(String fileNameFullPath) {
        
         String fileContent = null;
         
