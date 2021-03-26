@@ -21,9 +21,16 @@ public class AppService {
      * @param file to be compressed
      */
     public void compressFileLzw(File file) {
-        String content = Io.readFileContent(selectedFile.getAbsolutePath());
-        String compressedContent = Lzw.compress(content);
-        this.saveFile(file, compressedContent);
+        String compressedContent = null;
+        try {
+            String content = Io.readFileContent(selectedFile.getAbsolutePath());
+            compressedContent = Lzw.compress(content);
+        } catch (IOException e) {
+            this.actionStatus = "An ERROR occurred while reading the file:" + e.getMessage();
+            return;
+        } 
+        
+        this.saveFile(file, compressedContent);    
     }
     
     
