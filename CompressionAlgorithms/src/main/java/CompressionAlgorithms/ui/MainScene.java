@@ -1,6 +1,7 @@
 package CompressionAlgorithms.ui;
 
 import CompressionAlgorithms.domain.AppService;
+import CompressionAlgorithms.utils.FileExtension;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.Scene;
@@ -38,8 +39,7 @@ public class MainScene {
         primaryStage.setTitle(SceneTitleText);	
 
         Label contentTitle = new Label("Compress or extract a file");
-        contentTitle.setTextFill(Color.DARKBLUE);
-        contentTitle.setFont(Font.font("Calibri", FontWeight.BOLD, 26));
+        contentTitle.setFont(Font.font("Helvetica", FontWeight.BOLD, 22));
         HBox contentTitleContainer = new HBox();
         contentTitleContainer.setAlignment(Pos.CENTER);
         contentTitleContainer.getChildren().add(contentTitle);
@@ -52,7 +52,7 @@ public class MainScene {
 
         actionStatus = new Text();
         actionStatus.setText("No file selected");
-        actionStatus.setFont(Font.font("Calibri", FontWeight.NORMAL, 16));
+        actionStatus.setFont(Font.font("Helvetica", FontWeight.NORMAL, 16));
         actionStatus.setFill(Color.GRAY);
 
         Button compressFileBtn = new Button("Compress");
@@ -112,12 +112,15 @@ public class MainScene {
 
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as...");
-        fileChooser.setInitialFileName(this.appService.getSelectedFile().getName());
+        
+        String initialFileName = FileExtension.makeInitialLzwFileName(this.appService.getSelectedFile().getName());
+        fileChooser.setInitialFileName(initialFileName);
+        
         File fileToCompress = fileChooser.showSaveDialog(savedStage);
         
-       
         this.appService.compressFileLzw(fileToCompress);
         this.actionStatus.setText(this.appService.getActionStatus());
     }
+    
     
 }
