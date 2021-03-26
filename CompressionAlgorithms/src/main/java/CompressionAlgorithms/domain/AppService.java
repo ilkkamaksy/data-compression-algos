@@ -14,22 +14,35 @@ public class AppService {
     String actionStatus = "";
 
     /**
-     * Save the file
+     * Compress a file
      * 
-     * @param fileToSave File
+     * @param file to be compressed
      */
-    public void saveFile(File fileToSave) {
+    public void compressFileLzw(File file) {
+        String content = Io.readFileContent(selectedFile.getAbsolutePath());
+        String compressedContent = Lzw.compress(content);
+        this.saveFile(file, compressedContent);
+    }
+    
+    
+    /**
+     * Save a file to disk
+     * 
+     * @param file File to be saved
+     * @param content String the content of the file to be saved
+     */
+    private void saveFile(File file, String content) {
         try {
-            String content = Io.readFileContent(selectedFile.getAbsolutePath());
-            Io.saveFile(fileToSave, content);
-            this.actionStatus = "File saved: " + fileToSave.getName();
-            this.lastSavedFile = fileToSave;
+            Io.saveFile(file, content);
+            this.actionStatus = "File compressed and saved successfully";
+            this.lastSavedFile = file;
             
         } catch (IOException e) {
-            this.actionStatus = "An ERROR occurred while saving the file!" + fileToSave.getName();
-            System.out.println(e.getMessage());
+            this.actionStatus = "An ERROR occurred while saving the file:" + e.getMessage();
         }
     }
+    
+    // Getters and setters 
     
     public File getSelectedFile() {
         return selectedFile;

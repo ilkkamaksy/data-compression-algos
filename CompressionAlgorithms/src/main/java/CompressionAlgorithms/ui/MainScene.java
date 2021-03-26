@@ -17,8 +17,6 @@ import javafx.geometry.Insets;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import javafx.scene.control.TextArea;
 
 
@@ -34,7 +32,6 @@ public class MainScene {
     public MainScene(AppService appService) {
         this.appService = appService;
     }
-    
     
     public void initializeStage(Stage primaryStage) {
 
@@ -116,9 +113,10 @@ public class MainScene {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as...");
         fileChooser.setInitialFileName(this.appService.getSelectedFile().getName());
-        File savedFile = fileChooser.showSaveDialog(savedStage);
+        File fileToCompress = fileChooser.showSaveDialog(savedStage);
         
-        this.appService.saveFile(savedFile);
+       
+        this.appService.compressFileLzw(fileToCompress);
         this.actionStatus.setText(this.appService.getActionStatus());
     }
     
