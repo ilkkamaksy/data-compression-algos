@@ -28,16 +28,6 @@ public class Main {
         
         Launcher.run(args);        
         
-//        String sourceFilePath = args[0];
-//        String destinationFilePath = args[1];
-//             
-//        System.out.println("--" + sourceFilePath);
-//        
-//        String fileContent = Io.readFile(sourceFilePath);
-//        
-//        Io.writeToFile(fileContent, destinationFilePath);
-//        
-//        System.out.println(fileContent);
     }
     
 }
