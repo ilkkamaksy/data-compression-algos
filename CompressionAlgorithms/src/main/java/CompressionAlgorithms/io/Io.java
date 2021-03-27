@@ -62,8 +62,6 @@ public class Io {
      */
     public static boolean saveBinaryFile(File file, String content) {
         
-        byte[] data = content.getBytes(StandardCharsets.UTF_8);
- 
         try (FileOutputStream fos = new FileOutputStream(file)) {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(content);
