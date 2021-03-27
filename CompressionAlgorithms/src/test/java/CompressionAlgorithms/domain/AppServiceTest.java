@@ -47,6 +47,8 @@ public class AppServiceTest {
         boolean result = appService.compressFileLzw(targetFile);
         assertTrue(result);
         
+        targetFile.delete();
+        
     }
 
     /**
