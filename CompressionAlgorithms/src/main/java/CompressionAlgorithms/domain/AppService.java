@@ -18,19 +18,29 @@ public class AppService {
     /**
      * Compress a file
      * 
-     * @param file to be compressed
+     * @param targetFile to be compressed
      */
-    public void compressFileLzw(File file) {
-        String compressedContent = null;
+    public boolean compressFileLzw(File targetFile) {
+        String selectedFileContent = this.readFileContent(this.selectedFile);
+        String compressedContent = Lzw.compress(selectedFileContent);
+
+        return this.saveFile(targetFile, compressedContent);    
+    }
+    
+    /**
+     * Read content for a given file
+     * @param file File to be read
+     * @return content String
+     */
+    private String readFileContent(File file) {
+        String content = null;
         try {
-            String content = Io.readFileContent(selectedFile.getAbsolutePath());
-            compressedContent = Lzw.compress(content);
+            content = Io.readFileContent(selectedFile.getAbsolutePath());
         } catch (IOException e) {
             this.actionStatus = "An ERROR occurred while reading the file:" + e.getMessage();
-            return;
-        } 
+        }
         
-        this.saveFile(file, compressedContent);    
+        return content;
     }
     
     
@@ -40,15 +50,18 @@ public class AppService {
      * @param file File to be saved
      * @param content String the content of the file to be saved
      */
-    private void saveFile(File file, String content) {
+    private boolean saveFile(File file, String content) {
+        boolean result = false;
         try {
             Io.saveFile(file, content);
             this.actionStatus = "File compressed and saved successfully";
             this.lastSavedFile = file;
-            
+            result = true;
         } catch (IOException e) {
             this.actionStatus = "An ERROR occurred while saving the file:" + e.getMessage();
         }
+
+        return result;
     }
     
     // Getters and setters 
