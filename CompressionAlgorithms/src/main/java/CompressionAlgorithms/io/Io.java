@@ -5,9 +5,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.nio.charset.StandardCharsets;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 /**
  * The class responsible for file IO operations.
@@ -34,12 +34,12 @@ public class Io {
     
      
     /**
-     * Write a given content to a given file location.
+     * Write a given uncompressed content to a given file location.
      * 
      * @param file File
      * @param content String
      */
-    public static boolean saveFile(File file, String content) {
+    public static boolean saveTextFile(File file, String content) {
         try {
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
@@ -52,6 +52,27 @@ public class Io {
     
         return false;
         
+    }
+    
+    /**
+     * Save given content as binary file to a given file location
+     * @param file File destination file
+     * @param content String content
+     * @return boolean
+     */
+    public static boolean saveBinaryFile(File file, String content) {
+        
+        byte[] data = content.getBytes(StandardCharsets.UTF_8);
+ 
+        try (FileOutputStream fos = new FileOutputStream(file)) {
+            ObjectOutputStream oos = new ObjectOutputStream(fos);
+            oos.writeObject(content);
+            return true;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return false;
     }
     
 }

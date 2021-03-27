@@ -67,7 +67,7 @@ public class IoTest {
     public void saveFileSuccess() throws Exception {
         File file = new File("./tempFile.txt");
         String content = "temp content";
-        Io.saveFile(file, content);
+        Io.saveTextFile(file, content);
         
         File fileOnDisk = new File("./tempFile.txt");
         assertEquals(file.getAbsolutePath(), fileOnDisk.getAbsolutePath());
@@ -82,7 +82,7 @@ public class IoTest {
     public void saveFileWithoutNameThrowsIOException() throws Exception {
         File file = new File("");
         String content = "temp content";
-        boolean result = Io.saveFile(file, content);
+        boolean result = Io.saveTextFile(file, content);
         
         assertFalse(result);
     }

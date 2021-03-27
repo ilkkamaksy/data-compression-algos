@@ -24,7 +24,7 @@ public class AppService {
         String selectedFileContent = this.readFileContent(this.selectedFile);
         String compressedContent = Lzw.compress(selectedFileContent);
 
-        return this.saveFile(targetFile, compressedContent);    
+        return this.saveCompressedFile(targetFile, compressedContent);    
     }
     
     /**
@@ -50,8 +50,8 @@ public class AppService {
      * @param file File to be saved
      * @param content String the content of the file to be saved
      */
-    private boolean saveFile(File file, String content) {
-        boolean result = Io.saveFile(file, content);
+    private boolean saveCompressedFile(File file, String content) {
+        boolean result = Io.saveBinaryFile(file, content);
         
         if (result) {
             this.actionStatus = "File compressed and saved successfully";

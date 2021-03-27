@@ -57,7 +57,7 @@ public class AppServiceTest {
         when(Lzw.compress(this.testFileContent)).thenReturn("compressed");
         
         mockStatic(Io.class);
-        when(Io.saveFile(targetFile, "compressed")).thenReturn(true);
+        when(Io.saveBinaryFile(targetFile, "compressed")).thenReturn(true);
         when(Io.readFileContent(this.appService.getSelectedFile().getAbsolutePath())).thenReturn(this.testFileContent);
         
         boolean result = appService.compressFileLzw(targetFile);
@@ -78,7 +78,7 @@ public class AppServiceTest {
         when(Lzw.compress(this.testFileContent)).thenReturn("compressed");
         
         mockStatic(Io.class);
-        when(Io.saveFile(targetFile, "compressed")).thenReturn(false);
+        when(Io.saveTextFile(targetFile, "compressed")).thenReturn(false);
         
         appService.compressFileLzw(targetFile);
         assertEquals(this.appService.getActionStatus(), "An ERROR occurred while saving the file");
