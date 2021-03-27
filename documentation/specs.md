@@ -37,4 +37,4 @@ Bachelor’s in science (bSc).
 - [Lempel-Ziv-Welch - Wikipedia](https://en.wikipedia.org/wiki/Lempel%E2%80%93Ziv%E2%80%93Welch)
 - [Lempel-Ziv-Welch - Cardiff School of computer science & informatics](https://users.cs.cf.ac.uk/Dave.Marshall/Multimedia/node214.html)
 - [Lempel-Ziv-Welch Compression Algorithm with Exponential Decay](https://doi.org/10.1109/SMRLO.2016.108)
-
+- [LZW Data Compression - Uni. Duke dept. of computer science](https://www2.cs.duke.edu/csed/curious/compression/lzw.html)
