@@ -1,6 +1,8 @@
 package CompressionAlgorithms.domain;
 
 import CompressionAlgorithms.io.Io;
+import CompressionAlgorithms.domain.Lzw;
+import CompressionAlgorithms.domain.AppService;
         
 import java.io.File;
 import java.io.IOException;
@@ -8,27 +10,31 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.mockito.Mockito.doThrow;
+import org.junit.runner.RunWith;
+import org.powermock.api.mockito.PowerMockito;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 
 /**
  * Tests for AppService class
  */
+@RunWith(PowerMockRunner.class)
+@PrepareForTest({Lzw.class, Io.class})
 public class AppServiceTest {
    
     AppService appService;
-    Io mockIo;
-    
-    File testFile = new File("./testfile.txt");
-    String testFileContent = "test file content";
+   
+    File testFile;
+    String testFileContent;
    
     @Before
     public void setUp() {
         appService = new AppService();
-        mockIo = mock(Io.class);
-
+        testFile = new File("./testfile.txt");
+        testFileContent = "TOBEORNOTTOBEORTOBEORNOT";
         appService.setSelectedFile(testFile);
     }
     
@@ -38,31 +44,46 @@ public class AppServiceTest {
     }
 
     /**
-     * Return true after successfully compressing a file with LZW
+     * Compression returns true after successfully compressing a file with LZW
      */
     @Test
-    public void returnTrueWhenSuccessfullyCompressedLzw() {
-        File targetFile = new File("targetFile.txt");
+    public void returnTrueWhenSuccessfullyCompressedLzw() throws IOException {
+        File targetFile = new File("./targetFile.lzw");
+        this.appService.setSelectedFile(testFile);
+        
+        assertNotNull(this.appService.getSelectedFile());
+         
+        mockStatic(Lzw.class);
+        when(Lzw.compress(this.testFileContent)).thenReturn("compressed");
+        
+        mockStatic(Io.class);
+        when(Io.saveFile(targetFile, "compressed")).thenReturn(true);
+        when(Io.readFileContent(this.appService.getSelectedFile().getAbsolutePath())).thenReturn(this.testFileContent);
         
         boolean result = appService.compressFileLzw(targetFile);
         assertTrue(result);
-        
         targetFile.delete();
+        
         
     }
 
     /**
-     * Return false after failing to compress a file with LZW
+     * Compression returns false after failing to compress a file with LZW
      */
     @Test
     public void returnFalseWithFailedCompressionWithLzw() throws IOException {
-        File targetFile = new File("targetFile.txt");
+        File targetFile = new File("./targetFile.txt");
         
-        doThrow(new IOException()).when(mockIo).saveFile(targetFile, "compressed");
-
-        boolean result = appService.compressFileLzw(targetFile);
-        assertTrue (result);
+        mockStatic(Lzw.class);
+        when(Lzw.compress(this.testFileContent)).thenReturn("compressed");
         
+        mockStatic(Io.class);
+        when(Io.saveFile(targetFile, "compressed")).thenReturn(false);
+        
+        appService.compressFileLzw(targetFile);
+        assertEquals(this.appService.getActionStatus(), "An ERROR occurred while saving the file");
+        
+        targetFile.delete();
     }
     
 }

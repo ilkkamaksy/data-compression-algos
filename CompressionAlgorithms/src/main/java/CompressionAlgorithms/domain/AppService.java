@@ -51,14 +51,13 @@ public class AppService {
      * @param content String the content of the file to be saved
      */
     private boolean saveFile(File file, String content) {
-        boolean result = false;
-        try {
-            Io.saveFile(file, content);
+        boolean result = Io.saveFile(file, content);
+        
+        if (result) {
             this.actionStatus = "File compressed and saved successfully";
             this.lastSavedFile = file;
-            result = true;
-        } catch (IOException e) {
-            this.actionStatus = "An ERROR occurred while saving the file:" + e.getMessage();
+        } else {
+            this.actionStatus = "An ERROR occurred while saving the file";
         }
 
         return result;

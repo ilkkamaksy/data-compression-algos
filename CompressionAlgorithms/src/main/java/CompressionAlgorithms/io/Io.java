@@ -39,11 +39,19 @@ public class Io {
      * @param file File
      * @param content String
      */
-    public static void saveFile(File file, String content) throws IOException {
-        file.createNewFile();
-        FileWriter writer = new FileWriter(file);
-        writer.write(content);
-        writer.close();
+    public static boolean saveFile(File file, String content) {
+        try {
+            file.createNewFile();
+            FileWriter writer = new FileWriter(file);
+            writer.write(content);
+            writer.close();    
+            return true;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+    
+        return false;
+        
     }
     
 }

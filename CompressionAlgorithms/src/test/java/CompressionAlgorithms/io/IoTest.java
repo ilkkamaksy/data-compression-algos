@@ -15,11 +15,14 @@ import static org.junit.Assert.*;
  */
 public class IoTest {
     
-    File testFile = new File("./testfile.txt");
-    String testFileContent = "test file content";
+    File testFile; 
+    String testFileContent;
     
     @Before
     public void setUp() {
+        testFile = new File("./testfile.txt");
+        testFileContent = "TOBEORNOTTOBEORTOBEORNOT";
+        
         try {
             FileWriter writer = new FileWriter(testFile);
             writer.write(testFileContent);
@@ -61,7 +64,7 @@ public class IoTest {
      * A valid file can be saved to disk
      */
     @Test
-    public void saveFileHappyCase() throws Exception {
+    public void saveFileSuccess() throws Exception {
         File file = new File("./tempFile.txt");
         String content = "temp content";
         Io.saveFile(file, content);
@@ -75,11 +78,13 @@ public class IoTest {
     /**
      * Saving an invalid file throws IO exception
      */
-    @Test(expected = IOException.class)
+    @Test
     public void saveFileWithoutNameThrowsIOException() throws Exception {
         File file = new File("");
         String content = "temp content";
-        Io.saveFile(file, content);
+        boolean result = Io.saveFile(file, content);
+        
+        assertFalse(result);
     }
     
 }
