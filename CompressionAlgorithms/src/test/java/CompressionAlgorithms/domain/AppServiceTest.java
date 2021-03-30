@@ -1,17 +1,16 @@
 package CompressionAlgorithms.domain;
 
 import CompressionAlgorithms.io.Io;
-import CompressionAlgorithms.domain.Lzw;
-import CompressionAlgorithms.domain.AppService;
         
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.runner.RunWith;
-import org.powermock.api.mockito.PowerMockito;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -54,10 +53,11 @@ public class AppServiceTest {
         assertNotNull(this.appService.getSelectedFile());
          
         mockStatic(Lzw.class);
-        when(Lzw.compress(this.testFileContent)).thenReturn("compressed");
+        List<Integer> mockList = new ArrayList<>();
+        when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);
-        when(Io.saveBinaryFile(targetFile, "compressed")).thenReturn(true);
+        when(Io.saveBinaryFile(targetFile, mockList)).thenReturn(true);
         when(Io.readFileContent(this.appService.getSelectedFile().getAbsolutePath())).thenReturn(this.testFileContent);
         
         boolean result = appService.compressFileLzw(targetFile);
@@ -75,7 +75,8 @@ public class AppServiceTest {
         File targetFile = new File("./targetFile.txt");
         
         mockStatic(Lzw.class);
-        when(Lzw.compress(this.testFileContent)).thenReturn("compressed");
+        List<Integer> mockList = new ArrayList<>();
+        when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);
         when(Io.saveTextFile(targetFile, "compressed")).thenReturn(false);
