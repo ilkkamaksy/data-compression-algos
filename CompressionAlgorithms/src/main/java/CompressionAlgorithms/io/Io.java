@@ -5,9 +5,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * The class responsible for file IO operations.
@@ -57,10 +59,10 @@ public class Io {
     /**
      * Save given content as binary file to a given file location
      * @param file File destination file
-     * @param content String content
+     * @param content List<Integer> content
      * @return boolean
      */
-    public static boolean saveBinaryFile(File file, String content) {
+    public static boolean saveBinaryFile(File file, List<Integer> content) {
         
         try (FileOutputStream fos = new FileOutputStream(file)) {
             ObjectOutputStream oos = new ObjectOutputStream(fos);
@@ -71,6 +73,26 @@ public class Io {
         }
 
         return false;
+    }
+    
+    /**
+     * Open binary file 
+     * @param fileName String full path to file
+     * @return List<Integer>
+     */
+    public static List<Integer> openBinaryFile(String fileName) {
+        
+        try {
+            FileInputStream fis = new FileInputStream(fileName);
+            ObjectInputStream ois = new ObjectInputStream(fis);
+            Object obj = ois.readObject();
+            List<Integer> listFromFile = (ArrayList) obj;
+            return listFromFile;
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return null;
     }
     
 }

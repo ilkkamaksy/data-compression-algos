@@ -26,11 +26,14 @@ public class MainScene {
     private AppService appService;
     private Text actionStatus;
     private Stage savedStage;
+    Button compressFileBtn;
+    private boolean isCompressedFile;
     private static final String SceneTitleText = "Compression with Huffman and LZW";
     
     private TextArea txtArea;
 
     public MainScene(AppService appService) {
+        this.compressFileBtn = new Button("Compress");
         this.appService = appService;
     }
     
@@ -55,11 +58,11 @@ public class MainScene {
         actionStatus.setFont(Font.font("Helvetica", FontWeight.NORMAL, 16));
         actionStatus.setFill(Color.GRAY);
 
-        Button compressFileBtn = new Button("Compress");
         compressFileBtn.setOnAction(new SaveButtonListener());
         HBox compressFileBtnContainer = new HBox(10);
         compressFileBtnContainer.setAlignment(Pos.CENTER);
         compressFileBtnContainer.getChildren().addAll(compressFileBtn);
+        
         
         VBox vbox = new VBox(30);
         vbox.setPadding(new Insets(25, 25, 25, 25));
@@ -72,6 +75,7 @@ public class MainScene {
 
         savedStage = primaryStage;
     }
+    
 
     private class OpenButtonListener implements EventHandler<ActionEvent> {
 
@@ -99,13 +103,17 @@ public class MainScene {
         if (selectedFile != null) {
             actionStatus.setText("File selected: " + selectedFile.getName());
             actionStatus.setFill(Color.GREEN);
-        }
-        else {
+            isCompressedFile = FileExtension.isLzwFile(selectedFile.getName());
+        } else {
             actionStatus.setText("No file selected");
             actionStatus.setFill(Color.GRAY);
         }
         
-        
+        if (isCompressedFile) {
+            this.compressFileBtn.setText("Decompress");
+        } else {
+            this.compressFileBtn.setText("Compress");
+        }
     }
     
     private void showSaveFileChooser() {
@@ -113,12 +121,23 @@ public class MainScene {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as...");
         
-        String initialFileName = FileExtension.makeInitialLzwFileName(this.appService.getSelectedFile().getName());
+        String initialFileName = ""; 
+        if (this.isCompressedFile) {
+            initialFileName = FileExtension.makeInitialTxtFileName(this.appService.getSelectedFile().getName());
+        } else {
+            initialFileName = FileExtension.makeInitialLzwFileName(this.appService.getSelectedFile().getName());
+        }
+        
         fileChooser.setInitialFileName(initialFileName);
         
-        File fileToCompress = fileChooser.showSaveDialog(savedStage);
+        File targetFile = fileChooser.showSaveDialog(savedStage);
         
-        this.appService.compressFileLzw(fileToCompress);
+        if (this.isCompressedFile) {
+            this.appService.decompressLzwFile(targetFile);
+        } else {
+            this.appService.compressFileLzw(targetFile);    
+        }
+        
         this.actionStatus.setText(this.appService.getActionStatus());
     }
     

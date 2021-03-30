@@ -4,6 +4,7 @@ import CompressionAlgorithms.io.Io;
 import CompressionAlgorithms.utils.FileExtension;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 
 /**
@@ -22,7 +23,7 @@ public class AppService {
      */
     public boolean compressFileLzw(File targetFile) {
         String selectedFileContent = this.readFileContent(this.selectedFile);
-        String compressedContent = Lzw.compress(selectedFileContent);
+        List<Integer> compressedContent = Lzw.compress(selectedFileContent);
 
         return this.saveCompressedFile(targetFile, compressedContent);    
     }
@@ -43,14 +44,19 @@ public class AppService {
         return content;
     }
     
+    public void decompressLzwFile(File targetFile) {
+        List<Integer> content = Io.openBinaryFile(this.selectedFile.getAbsolutePath());
+        System.out.println(content);
+    }
+    
     
     /**
-     * Save a file to disk
+     * Save a compressed file to disk
      * 
      * @param file File to be saved
      * @param content String the content of the file to be saved
      */
-    private boolean saveCompressedFile(File file, String content) {
+    private boolean saveCompressedFile(File file, List<Integer> content) {
         boolean result = Io.saveBinaryFile(file, content);
         
         if (result) {

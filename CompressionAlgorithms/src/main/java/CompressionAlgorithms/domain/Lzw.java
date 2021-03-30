@@ -13,13 +13,13 @@ public class Lzw {
      * @param source String to compress
      * @return compressed String 
      */
-    public static String compress(String source) {
+    public static List<Integer> compress(String source) {
         
         Map<String, Integer> dictionary = initializeDictionary();
         
         List<Integer> compressed = compressStringByDictionary(source, dictionary);
         
-        return compressed.toString();
+        return compressed;
     }
     
     /**
