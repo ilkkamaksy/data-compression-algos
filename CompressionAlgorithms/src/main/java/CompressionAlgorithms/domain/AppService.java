@@ -17,35 +17,22 @@ public class AppService {
 
    
     /**
-     * Compress a file
-     * 
-     * @param targetFile to be compressed
+     * Compress the selected file to target file location
+     * @param targetFile 
      */
     public boolean compressFileLzw(File targetFile) {
-        String selectedFileContent = this.readFileContent(this.selectedFile);
+        String selectedFileContent = Io.readFileContent(selectedFile.getAbsolutePath());
+        if (selectedFileContent == null) {
+            this.actionStatus = "Could not read file.";
+            return false;
+        }
         List<Integer> compressedContent = Lzw.compress(selectedFileContent);
-
         return this.saveCompressedFile(targetFile, compressedContent);    
     }
     
+   
     /**
-     * Read content for a given file
-     * @param file File to be read
-     * @return content String
-     */
-    private String readFileContent(File file) {
-        String content = null;
-        try {
-            content = Io.readFileContent(selectedFile.getAbsolutePath());
-        } catch (IOException e) {
-            this.actionStatus = "An ERROR occurred while reading the file:" + e.getMessage();
-        }
-        
-        return content;
-    }
-    
-    /**
-     * Decompress a file to selected location
+     * Decompress the selected file to target file location
      * @param targetFile File 
      */
     public boolean decompressLzwFile(File targetFile) {
@@ -57,7 +44,7 @@ public class AppService {
             this.actionStatus = "File decompressed and saved successfully";
             this.lastSavedFile = targetFile;
         } else {
-            this.actionStatus = "An ERROR occurred while saving the file";
+            this.actionStatus = "Could not save file.";
         }
         
         return success;
@@ -77,7 +64,7 @@ public class AppService {
             this.actionStatus = "File compressed and saved successfully";
             this.lastSavedFile = file;
         } else {
-            this.actionStatus = "An ERROR occurred while saving the file";
+            this.actionStatus = "Could not save file.";
         }
 
         return success;

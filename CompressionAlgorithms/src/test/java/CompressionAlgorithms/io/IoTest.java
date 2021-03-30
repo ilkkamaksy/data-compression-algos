@@ -54,10 +54,11 @@ public class IoTest {
     /**
      * Reading an invalid file returns an IOException
      */
-    @Test(expected = IOException.class)
-    public void readInvalidFileContentThrowsException() throws Exception {
+    @Test
+    public void invalidFileWillReturnNull() {
         String fileNameFullPath = "";
         String result = Io.readFileContent(fileNameFullPath);
+        assertNull(result);
     }
     
     /**
@@ -79,7 +80,7 @@ public class IoTest {
      * Saving an invalid file throws IO exception
      */
     @Test
-    public void saveFileWithoutNameThrowsIOException() throws Exception {
+    public void saveFileWithoutNameReturnsFalse() {
         File file = new File("");
         String content = "temp content";
         boolean result = Io.saveTextFile(file, content);

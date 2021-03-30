@@ -81,8 +81,9 @@ public class AppServiceTest {
         mockStatic(Io.class);
         when(Io.saveTextFile(targetFile, "compressed")).thenReturn(false);
         
-        appService.compressFileLzw(targetFile);
-        assertEquals(this.appService.getActionStatus(), "An ERROR occurred while saving the file");
+        boolean success = appService.compressFileLzw(targetFile);
+        assertFalse(success);
+        assertEquals("Could not read file.", this.appService.getActionStatus());
         
         targetFile.delete();
     }

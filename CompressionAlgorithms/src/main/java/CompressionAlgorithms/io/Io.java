@@ -22,15 +22,20 @@ public class Io {
      * @param fileNameFullPath String
      * @return fileContent String
      */
-    public static String readFileContent(String fileNameFullPath) throws IOException {
+    public static String readFileContent(String fileNameFullPath) {
         String fileContent = null;
-        DataInputStream reader = new DataInputStream(new FileInputStream(fileNameFullPath));
-        int nBytesToRead = reader.available();
-        if (nBytesToRead > 0) {
-            byte[] bytes = new byte[nBytesToRead];
-            reader.read(bytes);
-            fileContent = new String(bytes);
+        try {
+            DataInputStream reader = new DataInputStream(new FileInputStream(fileNameFullPath));
+            int nBytesToRead = reader.available();
+            if (nBytesToRead > 0) {
+                byte[] bytes = new byte[nBytesToRead];
+                reader.read(bytes);
+                fileContent = new String(bytes);
+            }
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
+
         return fileContent;
     }
     
