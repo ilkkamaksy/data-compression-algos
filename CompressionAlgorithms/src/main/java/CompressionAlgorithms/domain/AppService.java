@@ -44,9 +44,23 @@ public class AppService {
         return content;
     }
     
-    public void decompressLzwFile(File targetFile) {
-        List<Integer> content = Io.openBinaryFile(this.selectedFile.getAbsolutePath());
-        System.out.println(content);
+    /**
+     * Decompress a file to selected location
+     * @param targetFile File 
+     */
+    public boolean decompressLzwFile(File targetFile) {
+        List<Integer> compressedContent = Io.openBinaryFile(this.selectedFile.getAbsolutePath());
+        String decompressedContent = Lzw.decompress(compressedContent);
+        boolean success = Io.saveTextFile(targetFile, decompressedContent);
+        
+        if (success) {
+            this.actionStatus = "File decompressed and saved successfully";
+            this.lastSavedFile = targetFile;
+        } else {
+            this.actionStatus = "An ERROR occurred while saving the file";
+        }
+        
+        return success;
     }
     
     
@@ -57,16 +71,16 @@ public class AppService {
      * @param content String the content of the file to be saved
      */
     private boolean saveCompressedFile(File file, List<Integer> content) {
-        boolean result = Io.saveBinaryFile(file, content);
+        boolean success = Io.saveBinaryFile(file, content);
         
-        if (result) {
+        if (success) {
             this.actionStatus = "File compressed and saved successfully";
             this.lastSavedFile = file;
         } else {
             this.actionStatus = "An ERROR occurred while saving the file";
         }
 
-        return result;
+        return success;
     }
     
     // Getters and setters 
