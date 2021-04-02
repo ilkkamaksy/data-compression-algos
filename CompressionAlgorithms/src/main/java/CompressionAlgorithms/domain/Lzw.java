@@ -91,6 +91,9 @@ public class Lzw {
      * @return String
      */
     private static String decompressByDictionary(Map<Integer, String> dictionary, List<Integer> compressedContent) {
+        if (compressedContent == null) return null;
+        if (compressedContent.size() == 0) return null;
+        
         String w = "" + (char)(int)compressedContent.remove(0);
         StringBuffer result = new StringBuffer(w);
         

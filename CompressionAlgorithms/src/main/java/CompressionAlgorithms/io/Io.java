@@ -5,9 +5,12 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +26,7 @@ public class Io {
      * @return fileContent String
      */
     public static String readFileContent(String fileNameFullPath) {
+        if (fileNameFullPath.isEmpty()) return null;
         String fileContent = null;
         try {
             DataInputStream reader = new DataInputStream(new FileInputStream(fileNameFullPath));
@@ -47,6 +51,9 @@ public class Io {
      * @param content String
      */
     public static boolean saveTextFile(File file, String content) {
+        if (content == null || file == null) return false;
+        if (content.isEmpty()) return false;
+        
         try {
             file.createNewFile();
             FileWriter writer = new FileWriter(file);
@@ -54,7 +61,7 @@ public class Io {
             writer.close();    
             return true;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     
         return false;
@@ -68,17 +75,20 @@ public class Io {
      * @return boolean
      */
     public static boolean saveBinaryFile(File file, List<Integer> content) {
+        if (file == null || content == null) return false;
         
-        try (FileOutputStream fos = new FileOutputStream(file)) {
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
             oos.writeObject(content);
             return true;
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return false;
     }
+    
     
     /**
      * Open binary file 
@@ -94,7 +104,7 @@ public class Io {
             List<Integer> listFromFile = (ArrayList) obj;
             return listFromFile;
         } catch (IOException | ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
