@@ -1,3 +1,5 @@
+[![codecov](https://codecov.io/gh/ilkkamaksy/data-compression-algos/branch/main/graph/badge.svg?token=DYFUJWUXLD)](https://codecov.io/gh/ilkkamaksy/data-compression-algos)
+
 # Data compression algorithms
 
 Java implementations of Huffman and Lempel Ziv algorithms.
