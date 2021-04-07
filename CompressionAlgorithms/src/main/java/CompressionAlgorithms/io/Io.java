@@ -26,7 +26,9 @@ public class Io {
      * @return fileContent String
      */
     public static String readFileContent(String fileNameFullPath) {
-        if (fileNameFullPath.isEmpty()) return null;
+        if (fileNameFullPath.isEmpty()) {
+            return null;
+        }
         String fileContent = null;
         try {
             DataInputStream reader = new DataInputStream(new FileInputStream(fileNameFullPath));
@@ -51,8 +53,12 @@ public class Io {
      * @param content String
      */
     public static boolean saveTextFile(File file, String content) {
-        if (content == null || file == null) return false;
-        if (content.isEmpty()) return false;
+        if (content == null || file == null) {
+            return false;
+        }
+        if (content.isEmpty()) {
+            return false;
+        }
         
         try {
             file.createNewFile();
@@ -75,7 +81,9 @@ public class Io {
      * @return boolean
      */
     public static boolean saveBinaryFile(File file, List<Integer> content) {
-        if (file == null || content == null) return false;
+        if (file == null || content == null) {
+            return false;
+        }
         
         try {
             FileOutputStream fos = new FileOutputStream(file);

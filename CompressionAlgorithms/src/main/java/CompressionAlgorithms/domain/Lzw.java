@@ -39,7 +39,7 @@ public class Lzw {
     private static Map<String, Integer> initializeCompressionDictionary() {
         Map<String, Integer> dictionary = new HashMap<>();
         for (int i = 0; i < 256; i++) {
-            dictionary.put("" + (char)i, i);
+            dictionary.put("" + (char) i, i);
         }
         return dictionary;
     }
@@ -52,7 +52,7 @@ public class Lzw {
     private static Map<Integer, String> initializeDecompressionDictionary() {
         Map<Integer, String> dictionary = new HashMap<>();
         for (int i = 0; i < 256; i++) {
-            dictionary.put(i, "" + (char)i);
+            dictionary.put(i, "" + (char) i);
         }
         return dictionary;
     }
@@ -78,11 +78,11 @@ public class Lzw {
         }
         
         if (!w.isEmpty()) {
-             result.add(dictionary.get(w));
+            result.add(dictionary.get(w));
         }
             
         return result;
-     }
+    }
     
     /**
      * Decompress compressed content by given dictionary
@@ -91,8 +91,12 @@ public class Lzw {
      * @return String
      */
     private static String decompressByDictionary(Map<Integer, String> dictionary, List<Integer> compressedContent) {
-        if (compressedContent == null) return null;
-        if (compressedContent.size() == 0) return null;
+        if (compressedContent == null) {
+            return null;
+        }
+        if (compressedContent.size() == 0) {
+            return null;
+        }
         
         String w = "" + (char)(int)compressedContent.remove(0);
         StringBuffer result = new StringBuffer(w);
