@@ -4,8 +4,7 @@ import CompressionAlgorithms.io.Io;
         
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import CompressionAlgorithms.domain.List;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -53,7 +52,7 @@ public class AppServiceTest {
         assertNotNull(this.appService.getSelectedFile());
          
         mockStatic(Lzw.class);
-        List<Integer> mockList = new ArrayList<>();
+        List<Integer> mockList = new List<>();
         when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);
@@ -75,7 +74,7 @@ public class AppServiceTest {
         File targetFile = new File("./targetFile.txt");
         
         mockStatic(Lzw.class);
-        List<Integer> mockList = new ArrayList<>();
+        List<Integer> mockList = new List<>();
         when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);

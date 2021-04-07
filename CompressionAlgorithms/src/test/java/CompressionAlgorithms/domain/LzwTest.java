@@ -20,7 +20,7 @@ public class LzwTest {
        
         String content = "TOBEORNOTTOBEORTOBEORNOT";
         String result = Lzw.compress(content).toString(); 
-        assertEquals(result.toString(), "[84, 79, 66, 69, 79, 82, 78, 79, 84, 257, 259, 261, 266, 260, 262, 264]");
+        assertEquals("[84, 79, 66, 69, 79, 82, 78, 79, 84, 257, 259, 261, 266, 260, 262, 264]", result.toString());
        
     }
     

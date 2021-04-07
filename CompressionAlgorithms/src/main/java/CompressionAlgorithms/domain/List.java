@@ -101,4 +101,19 @@ public class List<T> implements Serializable {
             this.values[i] = this.values[i + 1];
         }
     }
+
+    @Override
+    public String toString() {
+        String out = "[";
+        for (int i = 0; i < this.size; i++) {
+            out += "" + this.values[i];
+            if (i < this.size - 1) {
+                out += ", ";
+            }
+        }
+        out += "]";
+        return out;
+    }
+    
+    
 }
