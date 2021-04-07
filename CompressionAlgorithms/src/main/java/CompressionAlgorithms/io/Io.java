@@ -5,14 +5,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedInputStream;
-import java.util.ArrayList;
-import java.util.List;
+import CompressionAlgorithms.domain.List;
 
 /**
  * The class responsible for file IO operations.
@@ -109,7 +105,7 @@ public class Io {
             FileInputStream fis = new FileInputStream(fileName);
             ObjectInputStream ois = new ObjectInputStream(fis);
             Object obj = ois.readObject();
-            List<Integer> listFromFile = (ArrayList) obj;
+            List<Integer> listFromFile = (List) obj;
             return listFromFile;
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

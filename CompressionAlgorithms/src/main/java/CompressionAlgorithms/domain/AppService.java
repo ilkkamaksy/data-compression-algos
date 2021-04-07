@@ -4,7 +4,7 @@ import CompressionAlgorithms.io.Io;
 import CompressionAlgorithms.utils.FileExtension;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import CompressionAlgorithms.domain.List;
 
 
 /**

@@ -1,6 +1,8 @@
 package CompressionAlgorithms.domain;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import CompressionAlgorithms.domain.List;
 
 /**
  * The Lempel Ziv Welch algorithm 
@@ -65,7 +67,7 @@ public class Lzw {
      */
     private static List<Integer> compressStringByDictionary(String uncompressedString, Map<String, Integer> dictionary) {
         String w = "";
-        List<Integer> result = new ArrayList<>();
+        List<Integer> result = new List<>();
         for (char character: uncompressedString.toCharArray()) {
             String wc = w + character;
             if (dictionary.containsKey(wc)) {
