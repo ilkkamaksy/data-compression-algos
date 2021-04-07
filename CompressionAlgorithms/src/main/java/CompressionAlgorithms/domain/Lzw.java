@@ -2,7 +2,6 @@ package CompressionAlgorithms.domain;
 
 import java.util.HashMap;
 import java.util.Map;
-import CompressionAlgorithms.domain.List;
 
 /**
  * The Lempel Ziv Welch algorithm 
@@ -16,7 +15,7 @@ public class Lzw {
      * @return compressed String 
      */
     public static List<Integer> compress(String source) {   
-        Map<String, Integer> dictionary = initializeCompressionDictionary();
+        HashTable<String, Integer> dictionary = initializeCompressionDictionary();
         List<Integer> compressed = compressStringByDictionary(source, dictionary);
         return compressed;
     }
@@ -28,7 +27,7 @@ public class Lzw {
      * @return extracted String
      */
     public static String decompress(List<Integer> compressedContent) {
-        Map<Integer, String> dictionary = initializeDecompressionDictionary();
+        HashTable<Integer, String> dictionary = initializeDecompressionDictionary();
         String result = decompressByDictionary(dictionary, compressedContent);
         return result;
     }
@@ -36,10 +35,10 @@ public class Lzw {
     /**
      * Initialize the compression dictionary
      * 
-     * @return dictionary Map<String, Integer>
+     * @return dictionary HashTable<String, Integer>
      */
-    private static Map<String, Integer> initializeCompressionDictionary() {
-        Map<String, Integer> dictionary = new HashMap<>();
+    private static HashTable<String, Integer> initializeCompressionDictionary() {
+        HashTable<String, Integer> dictionary = new HashTable<>();
         for (int i = 0; i < 256; i++) {
             dictionary.put("" + (char) i, i);
         }
@@ -49,10 +48,10 @@ public class Lzw {
     /**
      * Initialize the decompression dictionary
      * 
-     * @return dictionary Map<Integer, String>
+     * @return dictionary HashTable<Integer, String>
      */
-    private static Map<Integer, String> initializeDecompressionDictionary() {
-        Map<Integer, String> dictionary = new HashMap<>();
+    private static HashTable<Integer, String> initializeDecompressionDictionary() {
+        HashTable<Integer, String> dictionary = new HashTable<>();
         for (int i = 0; i < 256; i++) {
             dictionary.put(i, "" + (char) i);
         }
@@ -62,10 +61,10 @@ public class Lzw {
     /**
      * Compress string using a given dictionary
      * @param uncompressedString String to compress
-     * @param dictionary Map<String, Integer> dictionary
+     * @param dictionary HashTable<String, Integer> dictionary
      * @return List<Integer>
      */
-    private static List<Integer> compressStringByDictionary(String uncompressedString, Map<String, Integer> dictionary) {
+    private static List<Integer> compressStringByDictionary(String uncompressedString, HashTable<String, Integer> dictionary) {
         String w = "";
         List<Integer> result = new List<>();
         for (char character: uncompressedString.toCharArray()) {
@@ -88,11 +87,11 @@ public class Lzw {
     
     /**
      * Decompress compressed content by given dictionary
-     * @param dictionary Map<Integer, String> 
+     * @param dictionary HashTable<Integer, String> 
      * @param compressedContent List<Integer> 
      * @return String
      */
-    private static String decompressByDictionary(Map<Integer, String> dictionary, List<Integer> compressedContent) {
+    private static String decompressByDictionary(HashTable<Integer, String> dictionary, List<Integer> compressedContent) {
         if (compressedContent == null) {
             return null;
         }

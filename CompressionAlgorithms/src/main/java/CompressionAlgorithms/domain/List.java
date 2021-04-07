@@ -11,7 +11,7 @@ public class List<T> implements Serializable {
     private int size;
 
     public List() {
-        this.values = (T[]) new Object[10];
+        this.values = (T[]) new Object[32];
         this.size = 0;
     }
     
