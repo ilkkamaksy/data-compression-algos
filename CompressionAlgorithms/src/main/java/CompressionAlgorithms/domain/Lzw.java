@@ -98,7 +98,7 @@ public class Lzw {
             return null;
         }
         
-        String w = "" + (char)(int)compressedContent.remove(0);
+        String w = "" + (char) (int) compressedContent.remove(0);
         StringBuffer result = new StringBuffer(w);
         
         for (int i = 0; i < compressedContent.size(); i++) {
