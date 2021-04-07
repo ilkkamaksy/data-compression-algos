@@ -158,7 +158,7 @@ public class HashTable<K, V> {
             Node<K, V> node = this.values[listIndex].get(i);
 
             int hash = Math.abs(node.getKey().hashCode() % newValuesList.length);
-            if(newValuesList[hash] == null) {
+            if (newValuesList[hash] == null) {
                 newValuesList[hash] = new List<>();
             }
 
