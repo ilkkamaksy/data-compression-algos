@@ -67,18 +67,18 @@ public class Lzw {
         String w = "";
         List<Integer> result = new ArrayList<>();
         for (char character: uncompressedString.toCharArray()) {
-            String currentAndNext = w + character;
-            if (dictionary.containsKey(currentAndNext)) {
-                w = currentAndNext;
+            String wc = w + character;
+            if (dictionary.containsKey(wc)) {
+                w = wc;
             } else {
                 result.add(dictionary.get(w));
-                dictionary.put(currentAndNext, dictionary.size() + 1);
+                dictionary.put(wc, dictionary.size() + 1);
                 w = "" + character;
             }
         }
         
-        if (!w.equals("")) {
-            result.add(dictionary.get(w));
+        if (!w.isEmpty()) {
+             result.add(dictionary.get(w));
         }
             
         return result;
@@ -97,19 +97,21 @@ public class Lzw {
         String w = "" + (char)(int)compressedContent.remove(0);
         StringBuffer result = new StringBuffer(w);
         
-        for (int i : compressedContent) {
+        for (int i = 0; i < compressedContent.size(); i++) {
+            int entry = compressedContent.get(i);
             String text = "";
-            if (dictionary.containsKey(i)) {
-                text = dictionary.get(i);
-            } else if (i == dictionary.size()) {
+            
+            if (dictionary.containsKey(entry)) {
+                text = dictionary.get(entry);
+            } else if (entry == dictionary.size()) {
                 text = w + w.charAt(0);
             } 
             
             if (!text.isEmpty()) {
-                result.append(text);
                 dictionary.put(dictionary.size() + 1, w + text.charAt(0));
-                w = text;
             }
+            result.append(text);
+            w = text;
             
         }
         
