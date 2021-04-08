@@ -24,6 +24,7 @@ import javafx.scene.control.TextArea;
 public class MainScene {
     
     private AppService appService;
+    private Text selectedFileStatus;
     private Text actionStatus;
     private Stage savedStage;
     Button compressFileBtn;
@@ -53,21 +54,25 @@ public class MainScene {
         openFileBtnContainer.setAlignment(Pos.CENTER);
         openFileBtnContainer.getChildren().addAll(openFileBtn);
 
-        actionStatus = new Text();
-        actionStatus.setText("No file selected");
-        actionStatus.setFont(Font.font("Helvetica", FontWeight.NORMAL, 16));
-        actionStatus.setFill(Color.GRAY);
+        selectedFileStatus = new Text();
+        selectedFileStatus.setText("No file selected");
+        selectedFileStatus.setFont(Font.font("Helvetica", FontWeight.NORMAL, 16));
+        selectedFileStatus.setFill(Color.GRAY);
 
         compressFileBtn.setOnAction(new SaveButtonListener());
         HBox compressFileBtnContainer = new HBox(10);
         compressFileBtnContainer.setAlignment(Pos.CENTER);
         compressFileBtnContainer.getChildren().addAll(compressFileBtn);
         
+        actionStatus = new Text();
+        actionStatus.setText("--");
+        actionStatus.setFont(Font.font("Helvetica", FontWeight.NORMAL, 16));
+        actionStatus.setFill(Color.GRAY);
         
         VBox vbox = new VBox(30);
         vbox.setPadding(new Insets(25, 25, 25, 25));
         vbox.setAlignment(Pos.CENTER);
-        vbox.getChildren().addAll(contentTitleContainer, openFileBtnContainer, actionStatus, compressFileBtnContainer);
+        vbox.getChildren().addAll(contentTitleContainer, openFileBtnContainer, selectedFileStatus, compressFileBtnContainer, actionStatus);
 
         Scene scene = new Scene(vbox, 500, 300); 
         primaryStage.setScene(scene);
@@ -101,12 +106,12 @@ public class MainScene {
         this.appService.setSelectedFile(selectedFile);
         
         if (selectedFile != null) {
-            actionStatus.setText("File selected: " + selectedFile.getName());
-            actionStatus.setFill(Color.GREEN);
+            selectedFileStatus.setText("Selected file: " + selectedFile.getName());
+            selectedFileStatus.setFill(Color.GREEN);
             isCompressedFile = FileExtension.isLzwFile(selectedFile.getName());
         } else {
-            actionStatus.setText("No file selected");
-            actionStatus.setFill(Color.GRAY);
+            selectedFileStatus.setText("No file selected");
+            selectedFileStatus.setFill(Color.GRAY);
         }
         
         if (isCompressedFile) {
@@ -132,13 +137,19 @@ public class MainScene {
         
         File targetFile = fileChooser.showSaveDialog(savedStage);
         
+        boolean success = false;
         if (this.isCompressedFile) {
-            this.appService.decompressLzwFile(targetFile);
+            success = this.appService.decompressLzwFile(targetFile);
         } else {
-            this.appService.compressFileLzw(targetFile);    
+            success = this.appService.compressFileLzw(targetFile);    
+        }
+        if (success) {
+            actionStatus.setFill(Color.GREEN);    
+        } else {
+            actionStatus.setFill(Color.RED);
         }
         
-        this.actionStatus.setText(this.appService.getActionStatus());
+        actionStatus.setText(this.appService.getActionStatus());
     }
     
     
