@@ -1,6 +1,6 @@
 # Specifications 
 
-The goal of this program is to compare the performance of data compression algorithms, namely Huffman and Lempel-Ziv-Welch. More specifically, the goal is to compare the average speed of execution in relation to the data compression level of these algorithms. 
+The goal of this program is to compare the performance of data compression algorithms, namely Huffman and Lempel-Ziv-Welch. More specifically, the goal is to compare the average speed of execution of these algorithms with various inputs. 
 
 The motivation for this project is to build ground for understanding LZ77-Huffman variants [utilized for example in lossles WebP encoding](https://developers.google.com/speed/webp/docs/compression).
 
@@ -38,3 +38,4 @@ Bachelor’s in science (bSc).
 - [Lempel-Ziv-Welch - Cardiff School of computer science & informatics](https://users.cs.cf.ac.uk/Dave.Marshall/Multimedia/node214.html)
 - [Lempel-Ziv-Welch Compression Algorithm with Exponential Decay](https://doi.org/10.1109/SMRLO.2016.108)
 - [LZW Data Compression - Uni. Duke dept. of computer science](https://www2.cs.duke.edu/csed/curious/compression/lzw.html)
+- [Lempel-Ziv-Welch (LZW) Compression - The Data Compression Guide](https://sites.google.com/site/datacompressionguide/lzw)
