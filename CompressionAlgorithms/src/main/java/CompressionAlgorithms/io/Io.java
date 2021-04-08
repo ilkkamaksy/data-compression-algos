@@ -9,6 +9,9 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import CompressionAlgorithms.domain.List;
+import java.nio.ByteBuffer;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  * The class responsible for file IO operations.
@@ -35,7 +38,7 @@ public class Io {
                 fileContent = new String(bytes);
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         return fileContent;
@@ -81,10 +84,12 @@ public class Io {
             return false;
         }
         
-        try {
-            FileOutputStream fos = new FileOutputStream(file);
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(content);
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            for (int i = 0; i < content.size(); i++) {
+                byte[] bytes = convertIntToByteArray(content.get(i));
+                outputStream.write(bytes);    
+            }
+            outputStream.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -93,7 +98,7 @@ public class Io {
         return false;
     }
     
-    
+   
     /**
      * Open binary file 
      * @param fileName String full path to file
@@ -102,16 +107,50 @@ public class Io {
     public static List<Integer> openBinaryFile(String fileName) {
         
         try {
-            FileInputStream fis = new FileInputStream(fileName);
-            ObjectInputStream ois = new ObjectInputStream(fis);
-            Object obj = ois.readObject();
-            List<Integer> listFromFile = (List) obj;
-            return listFromFile;
-        } catch (IOException | ClassNotFoundException e) {
+            byte[] byteTable = Files.readAllBytes(Paths.get(fileName));
+            List<Integer> fileContent = new List<>();
+            for (int i = 0; i < byteTable.length - 3; i = i + 4) {
+                byte[] entry = {
+                    byteTable[i], 
+                    byteTable[i + 1], 
+                    byteTable[i + 2], 
+                    byteTable[i + 3]
+                };
+                fileContent.add(convertByteArrayToInt(entry));
+            }
+            
+            return fileContent;
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         return null;
+    }
+    
+    /**
+     * Convert integer to byte array
+     * @param value int to convert
+     * @return byte[]
+     */
+    private static byte[] convertIntToByteArray(int value) {
+        return new byte[] {
+            (byte) (value >> 24),
+            (byte) (value >> 16),
+            (byte) (value >> 8),
+            (byte) value 
+        };
+    }
+    
+    /**
+     * Convert byte array to integer
+     * @param bytes to convert
+     * @return integer
+     */
+    private static int convertByteArrayToInt(byte[] bytes) {
+        return ((bytes[0] & 0xFF) << 24) |
+               ((bytes[1] & 0xFF) << 16) |
+               ((bytes[2] & 0xFF) << 8) |
+               ((bytes[3] & 0xFF) << 0);
     }
     
 }
