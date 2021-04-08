@@ -17,9 +17,6 @@ public class Lzw {
     public static List<Integer> compress(String source) {   
         HashTable<String, Integer> dictionary = initializeCompressionDictionary();
         List<Integer> compressed = compressStringByDictionary(source, dictionary);
-        for (int i = 0; i < compressed.size(); i++) {
-            System.out.println(compressed.get(i));
-        }
         return compressed;
     }
     
