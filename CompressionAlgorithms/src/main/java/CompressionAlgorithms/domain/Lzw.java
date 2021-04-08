@@ -7,7 +7,7 @@ import java.util.Map;
  * The Lempel Ziv Welch algorithm 
  */
 public class Lzw {
-    
+        
     /**
      * Compresses a given string of text using LZW
      * 
@@ -17,6 +17,9 @@ public class Lzw {
     public static List<Integer> compress(String source) {   
         HashTable<String, Integer> dictionary = initializeCompressionDictionary();
         List<Integer> compressed = compressStringByDictionary(source, dictionary);
+        for (int i = 0; i < compressed.size(); i++) {
+            System.out.println(compressed.get(i));
+        }
         return compressed;
     }
     
@@ -65,6 +68,7 @@ public class Lzw {
      * @return List<Integer>
      */
     private static List<Integer> compressStringByDictionary(String uncompressedString, HashTable<String, Integer> dictionary) {
+        int dictSize = dictionary.size();
         String w = "";
         List<Integer> result = new List<>();
         for (char character: uncompressedString.toCharArray()) {
@@ -73,7 +77,7 @@ public class Lzw {
                 w = wc;
             } else {
                 result.add(dictionary.get(w));
-                dictionary.put(wc, dictionary.size() + 1);
+                dictionary.put(wc, dictSize++);
                 w = "" + character;
             }
         }
@@ -99,6 +103,7 @@ public class Lzw {
             return null;
         }
         
+        int dictSize = dictionary.size();
         String w = "" + (char) (int) compressedContent.remove(0);
         StringBuffer result = new StringBuffer(w);
         
@@ -108,12 +113,12 @@ public class Lzw {
             
             if (dictionary.containsKey(entry)) {
                 text = dictionary.get(entry);
-            } else if (entry == dictionary.size()) {
+            } else if (entry == dictSize) {
                 text = w + w.charAt(0);
             } 
             
             if (!text.isEmpty()) {
-                dictionary.put(dictionary.size() + 1, w + text.charAt(0));
+                dictionary.put(dictSize++, w + text.charAt(0));
             }
             result.append(text);
             w = text;
