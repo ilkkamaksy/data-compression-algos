@@ -87,4 +87,46 @@ public class AppServiceTest {
         targetFile.delete();
     }
     
+    /**
+     * Decompression returns false after failing to decompress a file with LZW
+     */
+    @Test
+    public void returnFalseWithFailedDecompressionWithLzw() throws IOException {
+        File targetFile = new File("./targetFile.txt");
+        
+        mockStatic(Lzw.class);
+        List<Integer> mockList = new List<>();
+        when(Lzw.decompress(mockList)).thenReturn("");
+        
+        mockStatic(Io.class);
+        when(Io.saveTextFile(targetFile, "")).thenReturn(false);
+        
+        boolean success = appService.decompressLzwFile(targetFile);
+        assertFalse(success);
+                
+        targetFile.delete();
+    }
+    
+    /**
+     * Decompression returns true after successful LZW file decompression
+     */
+    @Test
+    public void returnTrueWithSuccessfulDecompressionWithLzw() throws IOException {
+        File targetFile = new File("./targetFile.txt");
+        
+        appService.setSelectedFile(targetFile);
+        
+        mockStatic(Lzw.class);
+        List<Integer> mockList = new List<>();
+        when(Lzw.decompress(mockList)).thenReturn("success");
+        
+        mockStatic(Io.class);
+        when(Io.openBinaryFile(targetFile.getAbsolutePath())).thenReturn(mockList);
+        when(Io.saveTextFile(targetFile, "success")).thenReturn(true);
+        
+        boolean success = appService.decompressLzwFile(targetFile);
+        assertTrue(success);
+                
+        targetFile.delete();
+    }
 }
