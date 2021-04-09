@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import CompressionAlgorithms.domain.List;
+import CompressionAlgorithms.utils.DataUtils;
 import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -86,7 +87,7 @@ public class Io {
         
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             for (int i = 0; i < content.size(); i++) {
-                byte[] bytes = convertIntToByteArray(content.get(i));
+                byte[] bytes = DataUtils.convertIntToByteArray(content.get(i));
                 outputStream.write(bytes);    
             }
             outputStream.close();
@@ -116,7 +117,7 @@ public class Io {
                     byteTable[i + 2], 
                     byteTable[i + 3]
                 };
-                fileContent.add(convertByteArrayToInt(entry));
+                fileContent.add(DataUtils.convertByteArrayToInt(entry));
             }
             
             return fileContent;
@@ -126,31 +127,5 @@ public class Io {
 
         return null;
     }
-    
-    /**
-     * Convert integer to byte array
-     * @param value int to convert
-     * @return byte[]
-     */
-    private static byte[] convertIntToByteArray(int value) {
-        return new byte[] {
-            (byte) (value >> 24),
-            (byte) (value >> 16),
-            (byte) (value >> 8),
-            (byte) value 
-        };
-    }
-    
-    /**
-     * Convert byte array to integer
-     * @param bytes to convert
-     * @return integer
-     */
-    private static int convertByteArrayToInt(byte[] bytes) {
-        return ((bytes[0] & 0xFF) << 24) |
-               ((bytes[1] & 0xFF) << 16) |
-               ((bytes[2] & 0xFF) << 8) |
-               ((bytes[3] & 0xFF) << 0);
-    }
-    
+       
 }
