@@ -1,7 +1,7 @@
 package CompressionAlgorithms.ui;
 
 import CompressionAlgorithms.domain.AppService;
-import CompressionAlgorithms.utils.FileExtension;
+import CompressionAlgorithms.utils.FileUtils;
 import javafx.stage.Stage;
 import javafx.stage.FileChooser;
 import javafx.scene.Scene;
@@ -108,7 +108,7 @@ public class MainScene {
         if (selectedFile != null) {
             selectedFileStatus.setText("Selected file: " + selectedFile.getName());
             selectedFileStatus.setFill(Color.GREEN);
-            isCompressedFile = FileExtension.isLzwFile(selectedFile.getName());
+            isCompressedFile = FileUtils.isLzwFile(selectedFile.getName());
         } else {
             selectedFileStatus.setText("No file selected");
             selectedFileStatus.setFill(Color.GRAY);
@@ -126,13 +126,7 @@ public class MainScene {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Save as...");
         
-        String initialFileName = ""; 
-        if (this.isCompressedFile) {
-            initialFileName = FileExtension.makeInitialTxtFileName(this.appService.getSelectedFile().getName());
-        } else {
-            initialFileName = FileExtension.makeInitialLzwFileName(this.appService.getSelectedFile().getName());
-        }
-        
+        String initialFileName = FileUtils.setInitialFileExtension(this.appService.getSelectedFile().getName());
         fileChooser.setInitialFileName(initialFileName);
         
         File targetFile = fileChooser.showSaveDialog(savedStage);
