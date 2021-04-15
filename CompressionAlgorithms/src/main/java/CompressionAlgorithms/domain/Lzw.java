@@ -102,7 +102,7 @@ public class Lzw {
         
         int dictSize = dictionary.size();
         String w = "" + (char) (int) compressedContent.remove(0);
-        StringBuffer result = new StringBuffer(w);
+        String result = w;
         
         for (int i = 0; i < compressedContent.size(); i++) {
             int entry = compressedContent.get(i);
@@ -117,11 +117,11 @@ public class Lzw {
             if (!text.isEmpty()) {
                 dictionary.put(dictSize++, w + text.charAt(0));
             }
-            result.append(text);
+            result += text;
             w = text;
             
         }
         
-        return result.toString();
+        return result;
     }
 }
