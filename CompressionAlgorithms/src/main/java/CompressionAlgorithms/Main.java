@@ -5,6 +5,7 @@
  */
 package CompressionAlgorithms;
 
+import CompressionAlgorithms.domain.HuffmanCode;
 import CompressionAlgorithms.ui.Launcher;
 
 /**
@@ -17,15 +18,11 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-//        if (args.length != 2) {
-//            System.out.println("Please provide arguments: \n\n"
-//                    + "[1] source file, e.g. /path/to/file/filename.txt and \n"
-//                    + "[2] destination location, e.g. path/to/file/example.txt.\n\n"
-//                    + "For example running with gradle: gradle run --args=\"myfile.txt destfile.txt\"");
-//            return;
-//        }
 
-       
+        String inputStr = "this is an example for huffman encoding";
+        String res = HuffmanCode.encode(inputStr);
+        
+        System.out.println("res " + res);
         
         Launcher.run(args); 
         
