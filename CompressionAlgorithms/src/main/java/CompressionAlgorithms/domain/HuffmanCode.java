@@ -2,22 +2,23 @@ package CompressionAlgorithms.domain;
 
 import java.util.Comparator;
 import java.util.PriorityQueue;
+import CompressionAlgorithms.domain.HashTable;
 
 /**
  * The Huffman code algorithm
  */
 public class HuffmanCode {
     
-    static String encodedResult; 
+    static HashTable<Character, String> huffCodes; 
     
     /**
      * Encode a given string with Huffman Code
      * @param inputStr String
      * @return String encoded string
      */
-    public static String encode(String inputStr) {
+    public static HashTable<Character, String> encode(String inputStr) {
        
-        encodedResult = "";
+        huffCodes = new HashTable<>();
     
         PriorityQueue<HuffmanNode> queue = initializeQueue(inputStr);
         
@@ -32,8 +33,8 @@ public class HuffmanCode {
             queue.add(temp);
         }
         
-        buildEncodedString(root, "");
-        return encodedResult;
+        generateCodes(root, "");
+        return huffCodes;
     }
     
     /**
@@ -74,15 +75,14 @@ public class HuffmanCode {
      * @param node HuffmanNode 
      * @param prefix String
      */
-    public static void buildEncodedString(HuffmanNode node, String prefix) {
+    public static void generateCodes(HuffmanNode node, String prefix) {
  
         if (node.left == null && node.right == null) {
-            System.out.println(node.value + "\t" + node.freq + "\t" + prefix);
-            encodedResult += prefix;
+            huffCodes.put(node.value, prefix);
             return;
         }
  
-        buildEncodedString(node.left, prefix + "0");
-        buildEncodedString(node.right, prefix + "1");
+        generateCodes(node.left, prefix + "0");
+        generateCodes(node.right, prefix + "1");
     }
 }

@@ -7,6 +7,7 @@ package CompressionAlgorithms;
 
 import CompressionAlgorithms.domain.HuffmanCode;
 import CompressionAlgorithms.ui.Launcher;
+import CompressionAlgorithms.domain.HashTable;
 
 /**
  *
@@ -20,9 +21,13 @@ public class Main {
     public static void main(String[] args) {
 
         String inputStr = "this is an example for huffman encoding";
-        String res = HuffmanCode.encode(inputStr);
+        HashTable<Character, String> res = HuffmanCode.encode(inputStr);
         
-        System.out.println("res " + res);
+        System.out.println("res");
+        for (Character c: inputStr.toCharArray()) {
+            
+            System.out.println(c + "\t" + res.get(c));
+        }
         
         Launcher.run(args); 
         
