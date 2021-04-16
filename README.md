@@ -16,6 +16,7 @@ Java implementations of Huffman and Lempel Ziv algorithms.
 - [Viikko 1](/documentation/viikkoraportti_1.md)
 - [Viikko 2](/documentation/viikkoraportti_2.md)
 - [Viikko 3](/documentation/viikkoraportti_3.md)
+- [Viikko 4](/documentation/viikkoraportti_4.md)
 
 ## Run program
 
