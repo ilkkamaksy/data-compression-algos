@@ -3,48 +3,51 @@ package CompressionAlgorithms.domain;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 import CompressionAlgorithms.domain.HashTable;
+import CompressionAlgorithms.domain.HuffmanNode;
 
 /**
  * The Huffman code algorithm
  */
 public class HuffmanCode {
     
-    static HashTable<Character, String> huffCodes; 
+    public static String encodedResult; 
+    public static HuffmanNode root;
     
     /**
      * Encode a given string with Huffman Code
      * @param inputStr String
      * @return String encoded string
      */
-    public static HashTable<Character, String> encode(String inputStr) {
+    public static String encode(String inputStr) {
        
-        huffCodes = new HashTable<>();
+        encodedResult = "";
+        root = null;
     
         PriorityQueue<HuffmanNode> queue = initializeQueue(inputStr);
-        
-        HuffmanNode root = null;
-        
+       
         while (queue.size() > 1) {
+            
             HuffmanNode left = queue.poll();
             HuffmanNode right = queue.poll();
         
-            HuffmanNode temp = new HuffmanNode(left, right);
-            root = temp;
-            queue.add(temp);
+            HuffmanNode parent = new HuffmanNode(left, right);
+            queue.add(parent);
         }
         
-        generateCodes(root, "");
-        return huffCodes;
+        root = queue.poll();
+        
+        generateHuffCode(root, "");
+        return encodedResult;
     }
     
     /**
-     * Initialize the priority queue 
+     * Initialize the priority queue for encoding
      * @param inputStr String 
      * @return PriorityQueue<HuffmanNode>
      */
     private static PriorityQueue<HuffmanNode> initializeQueue(String inputStr) {
-        Comparator<HuffmanNode> comparator = Comparator.comparing(HuffmanNode::getData);
-        PriorityQueue<HuffmanNode> queue = new PriorityQueue<>(10, comparator);
+        Comparator<HuffmanNode> comparator = Comparator.comparing(HuffmanNode::getFreq);
+        PriorityQueue<HuffmanNode> queue = new PriorityQueue<>(comparator);
         
         int[] charFreqs = initializeCharFreqs(inputStr);
                 
@@ -71,18 +74,47 @@ public class HuffmanCode {
     }
     
     /**
-     * Build the encoded string
+     * Generate the Huffman code
      * @param node HuffmanNode 
      * @param prefix String
      */
-    public static void generateCodes(HuffmanNode node, String prefix) {
- 
+    private static void generateHuffCode(HuffmanNode node, String prefix) {
+        
         if (node.left == null && node.right == null) {
-            huffCodes.put(node.value, prefix);
+            System.out.println("prefix " + prefix + "\t" + node.value);
+            encodedResult += prefix;
             return;
         }
- 
-        generateCodes(node.left, prefix + "0");
-        generateCodes(node.right, prefix + "1");
+
+        generateHuffCode(node.left, prefix + "0");
+        generateHuffCode(node.right, prefix + "1");
     }
+    
+    /**
+     * Decode Huffman encoded data
+     * @param encodedStr String encoded string
+     * @param inputNode HuffmanNode the decoded Huffman tree
+     * @return String decoded string
+     */
+    public static String decode(String encodedStr, HuffmanNode inputNode) {
+        
+        String result = "";
+        HuffmanNode current = inputNode;
+        
+        for (int i = 0; i < encodedStr.length(); i++) {
+            
+            if ("0".equals(Character.toString(encodedStr.charAt(i)))) {
+                current = current.left;
+            } else {
+                current = current.right;
+            }
+            
+            if (current.left == null && current.right == null) {
+                result += current.value;
+                current = inputNode;
+            }
+        }
+        return result;
+    }
+    
 }

@@ -6,6 +6,7 @@
 package CompressionAlgorithms;
 
 import CompressionAlgorithms.domain.HuffmanCode;
+import CompressionAlgorithms.domain.HuffmanNode;
 import CompressionAlgorithms.ui.Launcher;
 import CompressionAlgorithms.domain.HashTable;
 
@@ -20,14 +21,17 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        String inputStr = "this is an example for huffman encoding";
-        HashTable<Character, String> res = HuffmanCode.encode(inputStr);
+        String inputStr = "abc";
+        String res = HuffmanCode.encode(inputStr);
+        HuffmanNode tree = HuffmanCode.root;
         
-        System.out.println("res");
-        for (Character c: inputStr.toCharArray()) {
-            
-            System.out.println(c + "\t" + res.get(c));
-        }
+        System.out.println("enc");
+        System.out.println(res);
+        
+        String decodedStr = HuffmanCode.decode(res, tree);
+        
+        System.out.println("dec");
+        System.out.println(decodedStr);
         
         Launcher.run(args); 
         
