@@ -21,7 +21,7 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        String inputStr = "abc";
+        String inputStr = "The brown fox jumped over the lazy dog!";
         String res = HuffmanCode.encode(inputStr);
         HuffmanNode tree = HuffmanCode.root;
         

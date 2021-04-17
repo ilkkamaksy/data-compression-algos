@@ -1,9 +1,6 @@
 package CompressionAlgorithms.domain;
 
-import java.util.Comparator;
 import java.util.PriorityQueue;
-import CompressionAlgorithms.domain.HashTable;
-import CompressionAlgorithms.domain.HuffmanNode;
 
 /**
  * The Huffman code algorithm
@@ -26,34 +23,39 @@ public class HuffmanCode {
         PriorityQueue<HuffmanNode> queue = initializeQueue(inputStr);
        
         while (queue.size() > 1) {
-            
             HuffmanNode left = queue.poll();
-            HuffmanNode right = queue.poll();
-        
-            HuffmanNode parent = new HuffmanNode(left, right);
+            HuffmanNode right = queue.poll(); 
+            HuffmanNode parent = new HuffmanNode('\0', left.freq + right.freq, left, right);
             queue.add(parent);
         }
         
         root = queue.poll();
+    
         
-        generateHuffCode(root, "");
+        String[] st = new String[256];
+        buildCode(st, root, "");
+        
+        encodeInput(st, inputStr);
+        
+        writeCode(root, "");
         return encodedResult;
     }
     
+   
     /**
      * Initialize the priority queue for encoding
      * @param inputStr String 
      * @return PriorityQueue<HuffmanNode>
      */
     private static PriorityQueue<HuffmanNode> initializeQueue(String inputStr) {
-        Comparator<HuffmanNode> comparator = Comparator.comparing(HuffmanNode::getFreq);
-        PriorityQueue<HuffmanNode> queue = new PriorityQueue<>(comparator);
+        
+        PriorityQueue<HuffmanNode> queue = new PriorityQueue<>();
         
         int[] charFreqs = initializeCharFreqs(inputStr);
                 
         for (int i = 0; i < charFreqs.length; i++) {
             if (charFreqs[i] > 0) {
-                queue.add(new HuffmanNode(charFreqs[i], (char) i));
+                queue.add(new HuffmanNode((char) i, charFreqs[i], null, null));
             }
         }
         return queue;
@@ -74,20 +76,51 @@ public class HuffmanCode {
     }
     
     /**
-     * Generate the Huffman code
-     * @param node HuffmanNode 
-     * @param prefix String
+     * Build the Huffman code
+     * @param strArray String[] array of chars as string
+     * @param node HuffmanNode
+     * @param str String result
      */
-    private static void generateHuffCode(HuffmanNode node, String prefix) {
-        
-        if (node.left == null && node.right == null) {
-            System.out.println("prefix " + prefix + "\t" + node.value);
-            encodedResult += prefix;
-            return;
+    private static void buildCode(String[] strArray, HuffmanNode node, String str) {
+        if (!node.isLeaf()) {
+            buildCode(strArray, node.left,  str + '0');
+            buildCode(strArray, node.right, str + '1');
+        } else {
+            strArray[node.value] = str;
         }
-
-        generateHuffCode(node.left, prefix + "0");
-        generateHuffCode(node.right, prefix + "1");
+    }
+    
+    /**
+     * Write the Huffman code
+     * @param node HuffmanNode 
+     * @param str String
+     */
+    private static void writeCode(HuffmanNode node, String str) {
+        
+        if (!node.isLeaf()) {
+            writeCode(node.left, str + "0");    
+            writeCode(node.right, str + "1");    
+        } else {
+            str += str;
+        }
+    }
+    
+    /**
+     * Use Huffman code to encode input
+     * @param strArray array of string
+     * @param str String input string
+     */
+    private static void encodeInput(String[] strArray, String str) {
+        for (int i = 0; i < str.length(); i++) {
+            String code = strArray[str.charAt(i)];
+            for (int j = 0; j < code.length(); j++) {
+                if (code.charAt(j) == '0') {
+                    encodedResult += "0";
+                } else if (code.charAt(j) == '1') {
+                    encodedResult += "1";
+                }
+            }
+        }
     }
     
     /**
@@ -102,18 +135,20 @@ public class HuffmanCode {
         HuffmanNode current = inputNode;
         
         for (int i = 0; i < encodedStr.length(); i++) {
-            
-            if ("0".equals(Character.toString(encodedStr.charAt(i)))) {
+    
+            if (encodedStr.charAt(i) == '0') {
                 current = current.left;
             } else {
                 current = current.right;
             }
             
-            if (current.left == null && current.right == null) {
+            if (current.isLeaf()) {
                 result += current.value;
                 current = inputNode;
             }
+            
         }
+        
         return result;
     }
     
