@@ -31,11 +31,10 @@ public class HuffmanCode {
         
         root = queue.poll();
     
+        String[] strArray = new String[256];
+        buildCode(strArray, root, "");
         
-        String[] st = new String[256];
-        buildCode(st, root, "");
-        
-        encodeInput(st, inputStr);
+        encodeInput(strArray, inputStr);
         
         writeCode(root, "");
         return encodedResult;
