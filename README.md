@@ -2,7 +2,7 @@
 
 # Data compression algorithms
 
-Java implementations of Huffman and Lempel Ziv algorithms.
+Java implementations of Huffman and Lempel Ziv Welch algorithms.
 
 ## Documentation
 
