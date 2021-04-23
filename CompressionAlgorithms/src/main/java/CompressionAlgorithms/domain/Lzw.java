@@ -107,7 +107,7 @@ public class Lzw {
         for (int i = 0; i < compressedContent.size(); i++) {
             int entry = compressedContent.get(i);
             String text = "";
-            
+
             if (dictionary.containsKey(entry)) {
                 text = dictionary.get(entry);
             } else if (entry == dictSize) {

@@ -84,9 +84,8 @@ public class Io {
         if (file == null || content == null) {
             return false;
         }
-        
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
-            for (int i = 0; i < content.size(); i++) {
+            for (int i = 0; i < content.size(); i++) {       
                 byte[] bytes = DataUtils.convertIntToByteArray(content.get(i));
                 outputStream.write(bytes);    
             }
@@ -110,12 +109,10 @@ public class Io {
         try {
             byte[] byteTable = Files.readAllBytes(Paths.get(fileName));
             List<Integer> fileContent = new List<>();
-            for (int i = 0; i < byteTable.length - 3; i = i + 4) {
+            for (int i = 0; i < byteTable.length - 1; i = i + 2) {
                 byte[] entry = {
                     byteTable[i], 
-                    byteTable[i + 1], 
-                    byteTable[i + 2], 
-                    byteTable[i + 3]
+                    byteTable[i + 1]
                 };
                 fileContent.add(DataUtils.convertByteArrayToInt(entry));
             }

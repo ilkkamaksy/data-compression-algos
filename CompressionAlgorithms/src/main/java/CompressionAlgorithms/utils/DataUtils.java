@@ -11,10 +11,8 @@ public class DataUtils {
      * @return integer
      */
     public static int convertByteArrayToInt(byte[] bytes) {
-        return ((bytes[0] & 255) << 24) | 
-               ((bytes[1] & 255) << 16) | 
-               ((bytes[2] & 255) << 8) | 
-               ((bytes[3] & 255) << 0);
+        return ((bytes[0] & 255) << 8) | 
+               ((bytes[1] & 255) << 0);
     }
 
     /**
@@ -24,8 +22,6 @@ public class DataUtils {
      */
     public static byte[] convertIntToByteArray(int value) {
         return new byte[] {
-            (byte) (value >> 24), 
-            (byte) (value >> 16), 
             (byte) (value >> 8), 
             (byte) value
         };
