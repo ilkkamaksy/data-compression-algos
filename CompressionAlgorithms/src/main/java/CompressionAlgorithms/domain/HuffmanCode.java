@@ -33,10 +33,8 @@ public class HuffmanCode {
     
         String[] strArray = new String[256];
         buildCode(strArray, root, "");
-        
         encodeInput(strArray, inputStr);
         
-        writeCode(root, "");
         return encodedResult;
     }
     
@@ -89,21 +87,7 @@ public class HuffmanCode {
         }
     }
     
-    /**
-     * Write the Huffman code
-     * @param node HuffmanNode 
-     * @param str String
-     */
-    private static void writeCode(HuffmanNode node, String str) {
-        
-        if (!node.isLeaf()) {
-            writeCode(node.left, str + "0");    
-            writeCode(node.right, str + "1");    
-        } else {
-            str += str;
-        }
-    }
-    
+   
     /**
      * Use Huffman code to encode input
      * @param strArray array of string

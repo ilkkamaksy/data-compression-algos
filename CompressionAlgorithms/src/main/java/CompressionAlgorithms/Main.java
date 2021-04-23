@@ -8,7 +8,6 @@ package CompressionAlgorithms;
 import CompressionAlgorithms.domain.HuffmanCode;
 import CompressionAlgorithms.domain.HuffmanNode;
 import CompressionAlgorithms.ui.Launcher;
-import CompressionAlgorithms.domain.HashTable;
 
 /**
  *
