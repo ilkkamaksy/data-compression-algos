@@ -155,6 +155,11 @@ public class HuffmanCode {
         return result;
     }    
 
+    /**
+     * Utility method to decode the header
+     * @param header String 
+     * @return HuffmanNode
+     */
     public static HuffmanNode readHeader(String header) {
         List<Character> chars = new List<>();
         for (int i = header.length() - 1; i >= 0; i--) {
@@ -163,7 +168,12 @@ public class HuffmanCode {
         return decodeTree(chars);
     }
     
-    public static HuffmanNode decodeTree(List<Character> chars) {
+    /**
+     * Decode the Huffman Tree from given list of characters
+     * @param chars List<Character> input list containing characters
+     * @return HuffmanNode
+     */
+    private static HuffmanNode decodeTree(List<Character> chars) {
         
         if (chars.size() == 0) {
             return null;
