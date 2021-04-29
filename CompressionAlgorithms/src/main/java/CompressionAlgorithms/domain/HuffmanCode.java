@@ -139,10 +139,7 @@ public class HuffmanCode {
         String inputBody = encodedStr.substring(encodedStr.indexOf(sep) + 3);
         HuffmanNode root = readHeader(inputHeader);
         HuffmanNode current = root;
-        
-        System.out.println("header " + inputHeader);
-        System.out.println("body " + inputBody);
-        
+                
         for (int i = 0; i < inputBody.length(); i++) {
     
             if (current == null) {
@@ -154,8 +151,6 @@ public class HuffmanCode {
             } else {
                 current = current.right;
             }
-            
-            System.out.println("current " + current);
             
             if (current.isLeaf()) {
                 result += current.value;

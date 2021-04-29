@@ -19,18 +19,6 @@ public class Main {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-
-        String inputStr = "The brown fox jumped over the lazy dog!";
-//        String inputStr = "AABCDEFAABB";
-        String res = HuffmanCode.encode(inputStr);
-        
-        System.out.println("enc");
-        System.out.println(res);
-        
-        String decodedStr = HuffmanCode.decode(res);
-        
-        System.out.println("dec");
-        System.out.println(decodedStr);
         
         Launcher.run(args); 
         
