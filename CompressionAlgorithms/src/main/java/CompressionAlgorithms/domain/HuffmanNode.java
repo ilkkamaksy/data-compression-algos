@@ -26,6 +26,12 @@ public class HuffmanNode implements Comparable<HuffmanNode> {
     public int compareTo(HuffmanNode t) {
         return this.freq - t.freq;
     }
+
+    @Override
+    public String toString() {
+        return "HuffmanNode{" + "freq=" + freq + ", value=" + value + ", left=" + left + ", right=" + right + '}';
+    }
+    
     
     
 }

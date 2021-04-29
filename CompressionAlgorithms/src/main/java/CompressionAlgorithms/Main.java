@@ -21,13 +21,13 @@ public class Main {
     public static void main(String[] args) {
 
         String inputStr = "The brown fox jumped over the lazy dog!";
+        
         String res = HuffmanCode.encode(inputStr);
-        HuffmanNode tree = HuffmanCode.root;
         
         System.out.println("enc");
         System.out.println(res);
-        
-        String decodedStr = HuffmanCode.decode(res, tree);
+
+        String decodedStr = HuffmanCode.decode(res, HuffmanCode.header);
         
         System.out.println("dec");
         System.out.println(decodedStr);

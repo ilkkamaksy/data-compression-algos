@@ -1,14 +1,15 @@
 package CompressionAlgorithms.domain;
 
 import java.util.PriorityQueue;
+import CompressionAlgorithms.domain.List;
 
 /**
  * The Huffman code algorithm
  */
 public class HuffmanCode {
     
-    public static String encodedResult; 
-    public static HuffmanNode root;
+    public static String encodedBody;
+    public static String header;
     
     /**
      * Encode a given string with Huffman Code
@@ -17,8 +18,9 @@ public class HuffmanCode {
      */
     public static String encode(String inputStr) {
        
-        encodedResult = "";
-        root = null;
+        encodedBody = "";
+        header = "";
+        HuffmanNode root = null;
     
         PriorityQueue<HuffmanNode> queue = initializeQueue(inputStr);
        
@@ -32,10 +34,12 @@ public class HuffmanCode {
         root = queue.poll();
     
         String[] strArray = new String[256];
-        buildCode(strArray, root, "");
-        encodeInput(strArray, inputStr);
+        buildHuffmanCode(strArray, root, "");
         
-        return encodedResult;
+        encodeHuffmanNode(root);
+        encodeInputByHuffmanCode(strArray, inputStr);
+        
+        return encodedBody;
     }
     
    
@@ -78,32 +82,47 @@ public class HuffmanCode {
      * @param node HuffmanNode
      * @param str String result
      */
-    private static void buildCode(String[] strArray, HuffmanNode node, String str) {
-        if (!node.isLeaf()) {
-            buildCode(strArray, node.left,  str + '0');
-            buildCode(strArray, node.right, str + '1');
+    private static void buildHuffmanCode(String[] strArray, HuffmanNode node, String str) {
+        if (!node.isLeaf()) {            
+            buildHuffmanCode(strArray, node.left,  str + '0');
+            buildHuffmanCode(strArray, node.right, str + '1');
         } else {
             strArray[node.value] = str;
         }
     }
-    
    
     /**
      * Use Huffman code to encode input
      * @param strArray array of string
      * @param str String input string
      */
-    private static void encodeInput(String[] strArray, String str) {
+    private static void encodeInputByHuffmanCode(String[] strArray, String str) {
         for (int i = 0; i < str.length(); i++) {
             String code = strArray[str.charAt(i)];
             for (int j = 0; j < code.length(); j++) {
                 if (code.charAt(j) == '0') {
-                    encodedResult += "0";
+                    encodedBody += "0";
                 } else if (code.charAt(j) == '1') {
-                    encodedResult += "1";
+                    encodedBody += "1";
                 }
             }
         }
+    }
+    
+    /**
+     * Encode the Huffman tree
+     * @param node HuffmanNode the tree to decode
+     */
+    private static void encodeHuffmanNode(HuffmanNode node) {
+
+        if (node.isLeaf()) {
+            header += "" + node.value;
+            return;
+        } 
+        
+        header +=  "0";
+        encodeHuffmanNode(node.left);
+        encodeHuffmanNode(node.right);
     }
     
     /**
@@ -112,10 +131,11 @@ public class HuffmanCode {
      * @param inputNode HuffmanNode the decoded Huffman tree
      * @return String decoded string
      */
-    public static String decode(String encodedStr, HuffmanNode inputNode) {
+    public static String decode(String encodedStr, String header) {
         
         String result = "";
-        HuffmanNode current = inputNode;
+        HuffmanNode root = readHeader(header);
+        HuffmanNode current = root;
         
         for (int i = 0; i < encodedStr.length(); i++) {
     
@@ -127,12 +147,39 @@ public class HuffmanCode {
             
             if (current.isLeaf()) {
                 result += current.value;
-                current = inputNode;
+                current = root;
             }
             
         }
         
         return result;
+    }    
+
+    public static HuffmanNode readHeader(String header) {
+        List<Character> chars = new List<>();
+        for (int i = header.length() - 1; i >= 0; i--) {
+            chars.add(header.charAt(i));
+        }
+        return decodeTree(chars);
+    }
+    
+    public static HuffmanNode decodeTree(List<Character> chars) {
+        
+        if (chars.size() == 0) {
+            return null;
+        }
+        
+        char c = chars.remove(chars.size() - 1);
+        
+        if (c != '0') {
+            return new HuffmanNode(c, 1, null, null);
+        } 
+                
+        HuffmanNode left = decodeTree(chars);
+        HuffmanNode right = decodeTree(chars);
+        
+        return new HuffmanNode('\0', 1, left, right); 
+        
     }
     
 }
