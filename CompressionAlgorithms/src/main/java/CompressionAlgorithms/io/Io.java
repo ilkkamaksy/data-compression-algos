@@ -6,11 +6,9 @@ import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import CompressionAlgorithms.domain.List;
 import CompressionAlgorithms.utils.DataUtils;
-import java.nio.ByteBuffer;
+import java.io.BufferedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -18,6 +16,10 @@ import java.nio.file.Paths;
  * The class responsible for file IO operations.
  */
 public class Io {
+    
+    private BufferedOutputStream out;  
+    private int buffer;                
+    private int n;                     
     
     /**
      * Read content of a file given the full path to the file. 
@@ -75,12 +77,12 @@ public class Io {
     }
     
     /**
-     * Save given content as binary file to a given file location
-     * @param file File destination file
-     * @param content List<Integer> content
+     * Write a a group of integers as 16 bit values to a file
+     * @param file File target file
+     * @param content List<Integer> group of integers
      * @return boolean
      */
-    public static boolean saveBinaryFile(File file, List<Integer> content) {
+    public static boolean writeIntegersAsBinaryToFile(File file, List<Integer> content) {
         if (file == null || content == null) {
             return false;
         }
@@ -100,6 +102,30 @@ public class Io {
     }
     
    
+    /**
+     * Save a string as bits to a file
+     * @param file File destination file
+     * @param content List<Integer> content
+     * @return boolean
+     */
+    public static boolean writeStringAsBinaryFile(File file, String content) {
+        if (file == null || content == null) {
+            return false;
+        }
+        
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            for (int i = 0; i < content.length(); i++) {       
+                outputStream.write(content.charAt(i));    
+            }
+            outputStream.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
     /**
      * Open binary file 
      * @param fileName String full path to file

@@ -133,7 +133,8 @@ public class MainScene {
         } else if (FileUtils.isHffFile(selectedFile)) {
             this.compressHuffmanBtn.setText("Decompress");
         } else {
-            this.compressLzwBtn.setText("Compress");
+            this.compressLzwBtn.setText("Compress with LZW");
+            this.compressHuffmanBtn.setText("Compress with Huffman Code");
         }
     }
     
@@ -149,9 +150,9 @@ public class MainScene {
     private boolean showSaveFileChooserFoo(File targetFile) {
         switch (fileType) {
             case LZW:
-                return FileUtils.isLzwFile(this.appService.getSelectedFile()) ? this.appService.decompressLzwFile(targetFile) : this.appService.compressFileLzw(targetFile);
+                return FileUtils.isLzwFile(this.appService.getSelectedFile()) ? this.appService.decompressLzwFile(targetFile) : this.appService.compressWithLzw(targetFile);
             case HFF:
-                return FileUtils.isHffFile(this.appService.getSelectedFile()) ? this.appService.decompressLzwFile(targetFile) : this.appService.compressFileLzw(targetFile);
+                return FileUtils.isHffFile(this.appService.getSelectedFile()) ? this.appService.decompressLzwFile(targetFile) : this.appService.compressWithHff(targetFile);
             default:
                 return false;
         }

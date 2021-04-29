@@ -16,23 +16,25 @@ public class AppService {
 
    
     /**
-     * Compress the selected file to target file location
+     * Compress the selected file with LZW to target file location
      * @param targetFile 
+     * @return boolean success of operation
      */
-    public boolean compressFileLzw(File targetFile) {
+    public boolean compressWithLzw(File targetFile) {
         String selectedFileContent = Io.readFileContent(selectedFile.getAbsolutePath());
         if (selectedFileContent == null) {
             this.actionStatus = "Could not read file.";
             return false;
         }
         List<Integer> compressedContent = Lzw.compress(selectedFileContent);
-        return this.saveCompressedFile(targetFile, compressedContent);    
+        return this.saveLzwEncodingToFile(targetFile, compressedContent);    
     }
     
    
     /**
-     * Decompress the selected file to target file location
+     * Decompress the selected LZW file to target file location
      * @param targetFile File 
+     * @return boolean success of operation
      */
     public boolean decompressLzwFile(File targetFile) {
         List<Integer> compressedContent = Io.openBinaryFile(this.selectedFile.getAbsolutePath());
@@ -49,15 +51,30 @@ public class AppService {
         return success;
     }
     
+    /**
+     * Compress the selected file with Huffman Code to target file location
+     * @param targetFile 
+     * @return boolean success of operation
+     */
+    public boolean compressWithHff(File targetFile) {
+        String selectedFileContent = Io.readFileContent(selectedFile.getAbsolutePath());
+        if (selectedFileContent == null) {
+            this.actionStatus = "Could not read file.";
+            return false;
+        }
+        String compressedContent = HuffmanCode.encode(selectedFileContent);
+        return this.saveHuffmanEncodingToFile(targetFile, compressedContent);   
+    }
     
     /**
-     * Save a compressed file to disk
+     * Save LZW compressed content to file
      * 
-     * @param file File to be saved
-     * @param content String the content of the file to be saved
+     * @param file File target file
+     * @param content List<Integer> the group of integers encoded with lzw
+     * @return boolean success
      */
-    private boolean saveCompressedFile(File file, List<Integer> content) {
-        boolean success = Io.saveBinaryFile(file, content);
+    private boolean saveLzwEncodingToFile(File file, List<Integer> content) {
+        boolean success = Io.writeIntegersAsBinaryToFile(file, content);
         
         if (success) {
             this.actionStatus = "File compressed and saved successfully";
@@ -68,6 +85,27 @@ public class AppService {
 
         return success;
     }
+    
+    /**
+     * Save Huffman encoded string to file
+     * 
+     * @param file File target file
+     * @param content String the Huffman encoded string
+     * @return boolean success
+     */
+    private boolean saveHuffmanEncodingToFile(File file, String content) {
+        boolean success = Io.writeStringAsBinaryFile(file, content);
+        
+        if (success) {
+            this.actionStatus = "File compressed and saved successfully";
+            this.lastSavedFile = file;
+        } else {
+            this.actionStatus = "Could not save file.";
+        }
+
+        return success;
+    }
+    
     
     // Getters and setters 
     

@@ -56,10 +56,10 @@ public class AppServiceTest {
         when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);
-        when(Io.saveBinaryFile(targetFile, mockList)).thenReturn(true);
+        when(Io.writeIntegersAsBinaryToFile(targetFile, mockList)).thenReturn(true);
         when(Io.readFileContent(this.appService.getSelectedFile().getAbsolutePath())).thenReturn(this.testFileContent);
         
-        boolean result = appService.compressFileLzw(targetFile);
+        boolean result = appService.compressWithLzw(targetFile);
         assertTrue(result);
         targetFile.delete();
         
@@ -80,7 +80,7 @@ public class AppServiceTest {
         mockStatic(Io.class);
         when(Io.saveTextFile(targetFile, "compressed")).thenReturn(false);
         
-        boolean success = appService.compressFileLzw(targetFile);
+        boolean success = appService.compressWithLzw(targetFile);
         assertFalse(success);
         assertEquals("Could not read file.", this.appService.getActionStatus());
         
