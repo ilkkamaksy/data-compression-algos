@@ -10,6 +10,7 @@ public class HuffmanCode {
     
     public static String encodedBody;
     public static String header;
+    public static String sep = "###";
     
     /**
      * Encode a given string with Huffman Code
@@ -39,7 +40,7 @@ public class HuffmanCode {
         encodeHuffmanNode(root);
         encodeInputByHuffmanCode(strArray, inputStr);
         
-        return encodedBody;
+        return header + sep + encodedBody;
     }
     
    
@@ -131,23 +132,38 @@ public class HuffmanCode {
      * @param inputNode HuffmanNode the decoded Huffman tree
      * @return String decoded string
      */
-    public static String decode(String encodedStr, String header) {
+    public static String decode(String encodedStr) {
         
         String result = "";
-        HuffmanNode root = readHeader(header);
+        String inputHeader = encodedStr.substring(0, encodedStr.indexOf(sep));
+        String inputBody = encodedStr.substring(encodedStr.indexOf(sep) + 3);
+        HuffmanNode root = readHeader(inputHeader);
         HuffmanNode current = root;
         
-        for (int i = 0; i < encodedStr.length(); i++) {
+        System.out.println("header " + inputHeader);
+        System.out.println("body " + inputBody);
+        
+        for (int i = 0; i < inputBody.length(); i++) {
     
-            if (encodedStr.charAt(i) == '0') {
+            if (current == null) {
+                break;
+            }
+            
+            if (inputBody.charAt(i) == '0') {
                 current = current.left;
             } else {
                 current = current.right;
             }
             
+            System.out.println("current " + current);
+            
             if (current.isLeaf()) {
                 result += current.value;
                 current = root;
+            }
+            
+            if (current == null) {
+                break;
             }
             
         }
@@ -160,7 +176,7 @@ public class HuffmanCode {
      * @param header String 
      * @return HuffmanNode
      */
-    public static HuffmanNode readHeader(String header) {
+    private static HuffmanNode readHeader(String header) {
         List<Character> chars = new List<>();
         for (int i = header.length() - 1; i >= 0; i--) {
             chars.add(header.charAt(i));
