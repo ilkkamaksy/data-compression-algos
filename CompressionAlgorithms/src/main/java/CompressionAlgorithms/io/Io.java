@@ -84,6 +84,7 @@ public class Io {
         if (file == null || content == null) {
             return false;
         }
+        
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             for (int i = 0; i < content.size(); i++) {       
                 byte[] bytes = DataUtils.convertIntToByteArray(content.get(i));

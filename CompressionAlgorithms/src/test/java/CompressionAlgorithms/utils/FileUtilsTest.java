@@ -1,5 +1,6 @@
 package CompressionAlgorithms.utils;
 
+import java.io.File;
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
@@ -13,15 +14,16 @@ import static org.junit.Assert.*;
  */
 public class FileUtilsTest {
     
-
+   
     /**
      * setInitialFileExtension returns lzw file if given a txt file
      */
     @Test
     public void initialFileExtensionLzwWhenTxtGiven() {
-        String fileName = "test.txt";
-        String result = FileUtils.setInitialFileExtension(fileName);
-        assertEquals("test.lzw", result);
+        File testFile = new File("./testfile.txt");
+        String result = FileUtils.setInitialFileExtension(testFile);
+        assertEquals("testfile.lzw", result);
+        testFile.delete();
     }
     
     /**
@@ -29,9 +31,10 @@ public class FileUtilsTest {
      */
     @Test
     public void initialFileExtensionTxtWhenLzwGiven() {
-        String fileName = "test.lzw";
-        String result = FileUtils.setInitialFileExtension(fileName);
-        assertEquals("test.txt", result);
+        File testFile = new File("./testfile.lzw");
+        String result = FileUtils.setInitialFileExtension(testFile);
+        assertEquals("testfile.txt", result);
+        testFile.delete();
     }
 
     /**
@@ -39,9 +42,10 @@ public class FileUtilsTest {
      */
     @Test
     public void testIsLzwFile1() {
-        String fileName = "test.lzw";
-        boolean result = FileUtils.isLzwFile(fileName);
+        File testFile = new File("./testfile.lzw");
+        boolean result = FileUtils.isLzwFile(testFile);
         assertTrue(result);
+        testFile.delete();
     }
     
     /**
@@ -49,9 +53,10 @@ public class FileUtilsTest {
      */
     @Test
     public void testIsLzwFile2() {
-        String fileName = "test.txt";
-        boolean result = FileUtils.isLzwFile(fileName);
+        File testFile = new File("./testfile.txt");
+        boolean result = FileUtils.isLzwFile(testFile);
         assertFalse(result);
+        testFile.delete();
     }
     
     /**
@@ -59,9 +64,10 @@ public class FileUtilsTest {
      */
     @Test
     public void testIsLzwFile3() {
-        String fileName = "test";
-        boolean result = FileUtils.isLzwFile(fileName);
+        File testFile = new File("./testfile");
+        boolean result = FileUtils.isLzwFile(testFile);
         assertFalse(result);
+        testFile.delete();
     }
     
 }
