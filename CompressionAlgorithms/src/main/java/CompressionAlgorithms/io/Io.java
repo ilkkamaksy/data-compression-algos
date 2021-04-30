@@ -11,7 +11,6 @@ import CompressionAlgorithms.utils.DataUtils;
 import java.io.BufferedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.BitSet;
 
 /**
  * The class responsible for file IO operations.

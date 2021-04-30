@@ -6,10 +6,8 @@
 package CompressionAlgorithms.ui;
 
 import CompressionAlgorithms.domain.AppService;
-import CompressionAlgorithms.domain.Lzw;
 import javafx.application.Application;
 import javafx.stage.Stage;
-import javax.swing.text.ViewFactory;
 
 /**
  *

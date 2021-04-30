@@ -1,8 +1,5 @@
 package CompressionAlgorithms.domain;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * The Lempel Ziv Welch algorithm 
  */

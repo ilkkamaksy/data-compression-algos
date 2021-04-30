@@ -1,9 +1,7 @@
 package CompressionAlgorithms.domain;
 
 import CompressionAlgorithms.io.Io;
-import CompressionAlgorithms.utils.FileUtils;
 import java.io.File;
-import java.io.IOException;
 
 
 /**

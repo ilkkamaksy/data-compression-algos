@@ -1,7 +1,6 @@
 package CompressionAlgorithms.domain;
 
 import java.util.PriorityQueue;
-import CompressionAlgorithms.domain.List;
 
 /**
  * The Huffman code algorithm
