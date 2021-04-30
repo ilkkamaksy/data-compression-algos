@@ -18,6 +18,7 @@ Java implementations of Huffman and Lempel Ziv Welch algorithms.
 - [Viikko 3](/documentation/viikkoraportti_3.md)
 - [Viikko 4](/documentation/viikkoraportti_4.md)
 - [Viikko 5](/documentation/viikkoraportti_5.md)
+- [Viikko 6](/documentation/viikkoraportti_6.md)
 
 ## Run program
 
