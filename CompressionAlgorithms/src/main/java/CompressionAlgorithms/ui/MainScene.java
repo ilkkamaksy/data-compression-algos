@@ -152,7 +152,7 @@ public class MainScene {
             case LZW:
                 return FileUtils.isLzwFile(this.appService.getSelectedFile()) ? this.appService.decompressLzwFile(targetFile) : this.appService.compressWithLzw(targetFile);
             case HFF:
-                return FileUtils.isHffFile(this.appService.getSelectedFile()) ? this.appService.decompressLzwFile(targetFile) : this.appService.compressWithHff(targetFile);
+                return FileUtils.isHffFile(this.appService.getSelectedFile()) ? this.appService.decompressHffFile(targetFile) : this.appService.compressWithHff(targetFile);
             default:
                 return false;
         }

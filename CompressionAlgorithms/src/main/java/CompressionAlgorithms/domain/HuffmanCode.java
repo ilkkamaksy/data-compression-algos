@@ -34,12 +34,13 @@ public class HuffmanCode {
         
         root = queue.poll();
     
-        String[] strArray = new String[256];
-        buildHuffmanCode(strArray, root, "");
-        
+        String[] code = new String[256];
+        buildHuffmanCode(code, root, "");
+
         encodeHuffmanNode(root);
-        encodeInputByHuffmanCode(strArray, inputStr);
-        
+        encodeInputByHuffmanCode(code, inputStr);
+   
+        System.out.println(header + sep + encodedBody);
         return header + sep + encodedBody;
     }
     
@@ -79,16 +80,16 @@ public class HuffmanCode {
     
     /**
      * Build the Huffman code
-     * @param strArray String[] array of chars as string
+     * @param code String[] array of chars as string
      * @param node HuffmanNode
      * @param str String result
      */
-    private static void buildHuffmanCode(String[] strArray, HuffmanNode node, String str) {
+    private static void buildHuffmanCode(String[] code, HuffmanNode node, String str) {
         if (!node.isLeaf()) {            
-            buildHuffmanCode(strArray, node.left,  str + '0');
-            buildHuffmanCode(strArray, node.right, str + '1');
+            buildHuffmanCode(code, node.left,  str + '0');
+            buildHuffmanCode(code, node.right, str + '1');
         } else {
-            strArray[node.value] = str;
+            code[node.value] = str;
         }
     }
    

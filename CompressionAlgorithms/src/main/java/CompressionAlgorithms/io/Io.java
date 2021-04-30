@@ -11,15 +11,16 @@ import CompressionAlgorithms.utils.DataUtils;
 import java.io.BufferedOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.BitSet;
 
 /**
  * The class responsible for file IO operations.
  */
 public class Io {
     
-    private BufferedOutputStream out;  
-    private int buffer;                
-    private int n;                     
+    private static BufferedOutputStream out;  
+    private static int buffer;                
+    private static int n;                     
     
     /**
      * Read content of a file given the full path to the file. 
@@ -89,7 +90,7 @@ public class Io {
         
         try (FileOutputStream outputStream = new FileOutputStream(file)) {
             for (int i = 0; i < content.size(); i++) {       
-                byte[] bytes = DataUtils.convertIntToByteArray(content.get(i));
+                byte[] bytes = DataUtils.convertIntTo2Bytes(content.get(i));
                 outputStream.write(bytes);    
             }
             outputStream.close();
@@ -103,21 +104,29 @@ public class Io {
     
    
     /**
-     * Save a string as bits to a file
+     * Save a string as binary to a file
      * @param file File destination file
      * @param content List<Integer> content
      * @return boolean
      */
-    public static boolean writeStringAsBinaryFile(File file, String content) {
+    public static boolean writeHuffmanCodeAsBinaryToFile(File file, String content) {
         if (file == null || content == null) {
             return false;
         }
         
-        try (FileOutputStream outputStream = new FileOutputStream(file)) {
-            for (int i = 0; i < content.length(); i++) {       
-                outputStream.write(content.charAt(i));    
+        String header = content.substring(0, content.indexOf("###") + 3);
+        String body = content.substring(content.indexOf("###") + 3);
+        
+        try {
+            FileOutputStream os = new FileOutputStream(file);
+            out = new BufferedOutputStream(os);
+            for (int i = 0; i < header.length(); i++) { 
+                writeCharAsByte(header.charAt(i));
             }
-            outputStream.close();
+            for (int i = 0; i < body.length(); i++) { 
+                addBitToBuffer(body.charAt(i));    
+            }
+            out.close();
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -127,11 +136,57 @@ public class Io {
     }
     
     /**
-     * Open binary file 
-     * @param fileName String full path to file
-     * @return List<Integer>
+     * Write char as a byte to output
+     * @param c char
      */
-    public static List<Integer> openBinaryFile(String fileName) {
+    private static void writeCharAsByte(char c) {
+        byte bits = (byte) c;
+        try {
+            out.write(bits);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Add a bit to the buffer
+     * @param c char of the Huffman code
+     */
+    private static void addBitToBuffer(char c) {     
+        buffer <<= 1;
+        if (c == '1') {
+            buffer |= 1;
+        }
+        
+        n++;
+        if (n == 8) {
+            writeBufferAndFlush();
+        }
+    } 
+    
+    /**
+     * Write buffer to output and flush the buffer
+     */
+    private static void writeBufferAndFlush() {
+        if (n == 0) {
+            return;
+        }
+        
+        try {
+            out.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        n = 0;
+        buffer = 0;
+    }
+    
+    /**
+     * Read LZW file 
+     * @param fileName String full path to file
+     * @return List<Integer> LZW encoded content
+     */
+    public static List<Integer> readLzwFile(String fileName) {
         
         try {
             byte[] byteTable = Files.readAllBytes(Paths.get(fileName));
@@ -141,7 +196,7 @@ public class Io {
                     byteTable[i], 
                     byteTable[i + 1]
                 };
-                fileContent.add(DataUtils.convertByteArrayToInt(entry));
+                fileContent.add(DataUtils.convert2BytesToInt(entry));
             }
             
             return fileContent;
@@ -150,6 +205,54 @@ public class Io {
         }
 
         return null;
+    }
+    
+    /**
+     * Read HFF file 
+     * @param fileName String full path to file
+     * @return String HFF encoded content
+     */
+    public static String readHffFile(String fileName) {
+        
+        String content = "";
+        
+        try {
+            byte[] byteTable = Files.readAllBytes(Paths.get(fileName));
+            
+            for (int i = 0; i < byteTable.length; i++) {
+                
+                int charInt = DataUtils.convertByteToInt(byteTable[i]);
+
+                if (content.indexOf("###") == -1) {
+                    content += (char) charInt;
+                } else {  
+                    content += intToBinaryString(charInt);    
+                }
+            }
+            
+            return content;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    
+        return "";
+    }
+    
+    /**
+     * Integer to 8 bit string 
+     * @param value int to translate
+     * @return String s
+     */
+    private static String intToBinaryString(int value) {
+        String s = Integer.toBinaryString(value);
+        if (s.length() < 8) {
+            String prefix = "";
+            for (int j = 0; j < (8 - s.length()); j++) {
+                prefix += "0";
+            }
+            s = prefix + s;
+        }
+        return s;
     }
        
 }

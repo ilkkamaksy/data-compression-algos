@@ -121,7 +121,7 @@ public class AppServiceTest {
         when(Lzw.decompress(mockList)).thenReturn("success");
         
         mockStatic(Io.class);
-        when(Io.openBinaryFile(targetFile.getAbsolutePath())).thenReturn(mockList);
+        when(Io.readLzwFile(targetFile.getAbsolutePath())).thenReturn(mockList);
         when(Io.saveTextFile(targetFile, "success")).thenReturn(true);
         
         boolean success = appService.decompressLzwFile(targetFile);

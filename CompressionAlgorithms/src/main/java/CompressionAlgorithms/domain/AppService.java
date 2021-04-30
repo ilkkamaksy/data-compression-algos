@@ -37,16 +37,10 @@ public class AppService {
      * @return boolean success of operation
      */
     public boolean decompressLzwFile(File targetFile) {
-        List<Integer> compressedContent = Io.openBinaryFile(this.selectedFile.getAbsolutePath());
+        List<Integer> compressedContent = Io.readLzwFile(this.selectedFile.getAbsolutePath());
         String decompressedContent = Lzw.decompress(compressedContent);
         boolean success = Io.saveTextFile(targetFile, decompressedContent);
-        
-        if (success) {
-            this.actionStatus = "File decompressed and saved successfully";
-            this.lastSavedFile = targetFile;
-        } else {
-            this.actionStatus = "Could not save file.";
-        }
+        setActionStatusBySuccess(success);
         
         return success;
     }
@@ -67,6 +61,21 @@ public class AppService {
     }
     
     /**
+     * Decompress the selected HFF file to target file location
+     * @param targetFile File 
+     * @return boolean success of operation
+     */
+    public boolean decompressHffFile(File targetFile) {
+        
+        String compressedContent = Io.readHffFile(this.selectedFile.getAbsolutePath());
+        String decompressedContent = HuffmanCode.decode(compressedContent);
+        boolean success = Io.saveTextFile(targetFile, decompressedContent);
+        setActionStatusBySuccess(success);
+        
+        return success;
+    }
+    
+    /**
      * Save LZW compressed content to file
      * 
      * @param file File target file
@@ -75,14 +84,8 @@ public class AppService {
      */
     private boolean saveLzwEncodingToFile(File file, List<Integer> content) {
         boolean success = Io.writeIntegersAsBinaryToFile(file, content);
+        setActionStatusBySuccess(success);
         
-        if (success) {
-            this.actionStatus = "File compressed and saved successfully";
-            this.lastSavedFile = file;
-        } else {
-            this.actionStatus = "Could not save file.";
-        }
-
         return success;
     }
     
@@ -94,18 +97,23 @@ public class AppService {
      * @return boolean success
      */
     private boolean saveHuffmanEncodingToFile(File file, String content) {
-        boolean success = Io.writeStringAsBinaryFile(file, content);
-        
-        if (success) {
-            this.actionStatus = "File compressed and saved successfully";
-            this.lastSavedFile = file;
-        } else {
-            this.actionStatus = "Could not save file.";
-        }
+        boolean success = Io.writeHuffmanCodeAsBinaryToFile(file, content);
+        setActionStatusBySuccess(success);
 
         return success;
     }
     
+    /**
+     * Set action status by success of operation
+     * @param success boolean 
+     */
+    private void setActionStatusBySuccess(boolean success) {
+        if (success) {
+            this.actionStatus = "File saved successfully";
+        } else {
+            this.actionStatus = "Could not save file.";
+        }
+    }
     
     // Getters and setters 
     
