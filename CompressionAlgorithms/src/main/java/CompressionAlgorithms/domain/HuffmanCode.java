@@ -39,7 +39,6 @@ public class HuffmanCode {
         encodeHuffmanNode(root);
         encodeInputByHuffmanCode(code, inputStr);
    
-        System.out.println(header + sep + encodedBody);
         return header + sep + encodedBody;
     }
     
