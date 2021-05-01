@@ -27,7 +27,7 @@ jobs:
           cd CompressionAlgorithms && ./gradlew build
       - name: Run the tests
         run: 
-          cd CompressionAlgorithms && ./gradlew jacocotestreport
+          cd CompressionAlgorithms && ./gradlew test && ./gradlew jacocotestreport
       - run: bash <(curl -s https://codecov.io/bash)
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
