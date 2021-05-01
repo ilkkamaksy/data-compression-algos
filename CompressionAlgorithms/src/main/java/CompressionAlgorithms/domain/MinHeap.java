@@ -23,12 +23,14 @@ public class MinHeap {
         heap[++size] = element;
         int currentIndex = size;
   
-        if (currentIndex > 1) {
+        while (currentIndex > 1) {
             int parentIndex = parent(currentIndex);
-            while (heap[currentIndex].freq < heap[parentIndex].freq) {
+            if (heap[currentIndex].freq < heap[parentIndex].freq) {
                 swap(currentIndex, parentIndex);
-                currentIndex = parent(currentIndex);
-            }    
+                currentIndex = parentIndex;
+            } else {
+                break;
+            }
         }
         
     }
