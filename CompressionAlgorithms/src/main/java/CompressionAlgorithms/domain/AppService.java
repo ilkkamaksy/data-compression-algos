@@ -57,7 +57,7 @@ public class AppService {
             setActionStatusFail();
             return false;
         }
-        String compressedContent = HuffmanCode.encode(selectedFileContent);
+        List<Character> compressedContent = HuffmanCode.encode(selectedFileContent);
         return this.saveHuffmanEncodingToFile(targetFile, compressedContent);   
     }
     
@@ -94,10 +94,10 @@ public class AppService {
      * Save Huffman encoded string to file
      * 
      * @param file File target file
-     * @param content String the Huffman encoded string
+     * @param content List<Character> the Huffman encoded content
      * @return boolean success
      */
-    private boolean saveHuffmanEncodingToFile(File file, String content) {
+    private boolean saveHuffmanEncodingToFile(File file, List<Character> content) {
         boolean success = Io.writeHuffmanCodeAsBinaryToFile(file, content);
         setActionStatusBySuccess(success);
 

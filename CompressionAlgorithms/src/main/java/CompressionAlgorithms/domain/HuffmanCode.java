@@ -7,39 +7,39 @@ import java.util.PriorityQueue;
  */
 public class HuffmanCode {
     
-    public static String encodedBody;
-    public static String header;
-    public static String sep = "###";
+    public static List<Character> encodedContent;
+    public static char sep = '#';
     
     /**
      * Encode a given string with Huffman Code
      * @param inputStr String
-     * @return String encoded string
+     * @return List<Character> encoded content
      */
-    public static String encode(String inputStr) {
+    public static List<Character> encode(String inputStr) {
        
-        encodedBody = "";
-        header = "";
+        encodedContent = new List<>();
         HuffmanNode root = null;
-    
+
         MinHeap queue = initializeQueue(inputStr);
-       
+
         while (queue.size() > 1) {
             HuffmanNode left = queue.poll();
             HuffmanNode right = queue.poll(); 
             HuffmanNode parent = new HuffmanNode('\0', left.freq + right.freq, left, right);
             queue.add(parent);
         }
-        
+
         root = queue.poll();
     
         String[] code = new String[256];
         buildHuffmanCode(code, root, "");
 
         encodeHuffmanNode(root);
+        encodedContent.add(sep);
+
         encodeInputByHuffmanCode(code, inputStr);
    
-        return header + sep + encodedBody;
+        return encodedContent;
     }
     
    
@@ -90,20 +90,21 @@ public class HuffmanCode {
             code[node.value] = str;
         }
     }
-   
+    
+    
     /**
      * Use Huffman code to encode input
-     * @param strArray array of string
-     * @param str String input string
+     * @param codes String[] array of string
+     * @param input String input string
      */
-    private static void encodeInputByHuffmanCode(String[] strArray, String str) {
-        for (int i = 0; i < str.length(); i++) {
-            String code = strArray[str.charAt(i)];
+    private static void encodeInputByHuffmanCode(String[] codes, String input) {
+        for (int i = 0; i < input.length(); i++) {
+            String code = codes[input.charAt(i)];
             for (int j = 0; j < code.length(); j++) {
                 if (code.charAt(j) == '0') {
-                    encodedBody += "0";
+                    encodedContent.add('0');
                 } else if (code.charAt(j) == '1') {
-                    encodedBody += "1";
+                    encodedContent.add('1');
                 }
             }
         }
@@ -116,11 +117,11 @@ public class HuffmanCode {
     private static void encodeHuffmanNode(HuffmanNode node) {
 
         if (node.isLeaf()) {
-            header += "" + node.value;
+            encodedContent.add(node.value);
             return;
         } 
         
-        header +=  "0";
+        encodedContent.add('0');
         encodeHuffmanNode(node.left);
         encodeHuffmanNode(node.right);
     }
@@ -135,7 +136,7 @@ public class HuffmanCode {
         
         String result = "";
         String inputHeader = encodedStr.substring(0, encodedStr.indexOf(sep));
-        String inputBody = encodedStr.substring(encodedStr.indexOf(sep) + 3);
+        String inputBody = encodedStr.substring(encodedStr.indexOf(sep) + 1);
         HuffmanNode root = readHeader(inputHeader);
         HuffmanNode current = root;
                 

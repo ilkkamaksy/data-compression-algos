@@ -108,23 +108,31 @@ public class Io {
      * @param content List<Integer> content
      * @return boolean
      */
-    public static boolean writeHuffmanCodeAsBinaryToFile(File file, String content) {
-        if (file == null || content == null) {
+    public static boolean writeHuffmanCodeAsBinaryToFile(File file, List<Character> content) {
+        if (file == null || content.size() == 0) {
             return false;
         }
-        
-        String header = content.substring(0, content.indexOf("###") + 3);
-        String body = content.substring(content.indexOf("###") + 3);
-        
+
         try {
             FileOutputStream os = new FileOutputStream(file);
             out = new BufferedOutputStream(os);
-            for (int i = 0; i < header.length(); i++) { 
-                writeCharAsByte(header.charAt(i));
+            boolean isHeader = true;
+            for (int i = 0; i < content.size(); i++) { 
+                
+                char c = content.get(i);
+
+                if (isHeader) {
+                    writeCharAsByte(c);
+                } else {
+                    addBitToBuffer(c);
+                }
+                
+                if (c == '#') {
+                    isHeader = false;
+                }
+                
             }
-            for (int i = 0; i < body.length(); i++) { 
-                addBitToBuffer(body.charAt(i));    
-            }
+            
             out.close();
             return true;
         } catch (IOException e) {
@@ -222,7 +230,7 @@ public class Io {
                 
                 int charInt = DataUtils.convertByteToInt(byteTable[i]);
 
-                if (content.indexOf("###") == -1) {
+                if (content.indexOf("#") == -1) {
                     content += (char) charInt;
                 } else {  
                     content += intToBinaryString(charInt);    
