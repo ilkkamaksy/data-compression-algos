@@ -100,6 +100,7 @@ public class MainScene {
         @Override
         public void handle(ActionEvent e) {
             fileType = FileType.LZW;
+            setActionStatusBusy();
             initSaveFileChooser();
         }
     }
@@ -109,6 +110,7 @@ public class MainScene {
         @Override
         public void handle(ActionEvent e) {
             fileType = FileType.HFF;
+            setActionStatusBusy();
             initSaveFileChooser();
         }
     }
@@ -128,6 +130,8 @@ public class MainScene {
             selectedFileStatus.setFill(Color.GRAY);
         }
 
+        resetActionStatus();
+        
         if (FileUtils.isLzwFile(selectedFile)) {
             this.compressLzwBtn.setText("Decompress");
         } else if (FileUtils.isHffFile(selectedFile)) {
@@ -156,6 +160,16 @@ public class MainScene {
             default:
                 return false;
         }
+    }
+    
+    private void resetActionStatus() {
+        actionStatus.setFill(Color.GRAY);
+        actionStatus.setText("--");
+    }
+    
+    private void setActionStatusBusy() {
+        actionStatus.setFill(Color.GRAY);
+        actionStatus.setText("Working on it...");
     }
     
     private void setActionStatus(boolean success) {

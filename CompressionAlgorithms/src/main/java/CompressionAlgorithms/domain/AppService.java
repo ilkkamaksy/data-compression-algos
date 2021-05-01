@@ -19,9 +19,10 @@ public class AppService {
      * @return boolean success of operation
      */
     public boolean compressWithLzw(File targetFile) {
+        setActionStatusBusy();
         String selectedFileContent = Io.readFileContent(selectedFile.getAbsolutePath());
         if (selectedFileContent == null) {
-            this.actionStatus = "Could not read file.";
+            setActionStatusFail();
             return false;
         }
         List<Integer> compressedContent = Lzw.compress(selectedFileContent);
@@ -35,6 +36,7 @@ public class AppService {
      * @return boolean success of operation
      */
     public boolean decompressLzwFile(File targetFile) {
+        setActionStatusBusy();
         List<Integer> compressedContent = Io.readLzwFile(this.selectedFile.getAbsolutePath());
         String decompressedContent = Lzw.decompress(compressedContent);
         boolean success = Io.saveTextFile(targetFile, decompressedContent);
@@ -49,9 +51,10 @@ public class AppService {
      * @return boolean success of operation
      */
     public boolean compressWithHff(File targetFile) {
+        setActionStatusBusy();
         String selectedFileContent = Io.readFileContent(selectedFile.getAbsolutePath());
         if (selectedFileContent == null) {
-            this.actionStatus = "Could not read file.";
+            setActionStatusFail();
             return false;
         }
         String compressedContent = HuffmanCode.encode(selectedFileContent);
@@ -64,7 +67,7 @@ public class AppService {
      * @return boolean success of operation
      */
     public boolean decompressHffFile(File targetFile) {
-        
+        this.setActionStatusBusy();
         String compressedContent = Io.readHffFile(this.selectedFile.getAbsolutePath());
         String decompressedContent = HuffmanCode.decode(compressedContent);
         boolean success = Io.saveTextFile(targetFile, decompressedContent);
@@ -99,6 +102,20 @@ public class AppService {
         setActionStatusBySuccess(success);
 
         return success;
+    }
+    
+    /**
+     * Set action status fail
+     */
+    private void setActionStatusFail() {
+        this.actionStatus = "Could not read file.";
+    }
+    
+    /**
+     * Set action status busy
+     */
+    private void setActionStatusBusy() {
+        this.actionStatus = "Working on it...";
     }
     
     /**
