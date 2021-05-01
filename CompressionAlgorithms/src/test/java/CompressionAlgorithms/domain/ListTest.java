@@ -51,6 +51,15 @@ public class ListTest {
         assertEquals("foo", result);
         assertEquals(1, list.size());
     }
+    
+    @Test
+    public void removeFromListRemovesTheValue() {
+        List<String> list = new List();
+        list.add("foo");
+        String result = list.remove(0);
+        assertFalse("foo", list.contains("foo"));
+        assertEquals(0, list.size());
+    }
 
     @Test
     public void containsReturnsTrueWhenFound() {
