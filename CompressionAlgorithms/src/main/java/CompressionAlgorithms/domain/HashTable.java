@@ -40,9 +40,6 @@ public class HashTable<K, V> {
      * @param value the value
      */
     public void put(K key, V value) {
-        if (key == null) {
-            return;
-        }
         List<Node<K, V>> nodeListAtIndex = getNodeListAssociatedToKey(key);
         int index = getKeyIndexFromNodeList(nodeListAtIndex, key);
 

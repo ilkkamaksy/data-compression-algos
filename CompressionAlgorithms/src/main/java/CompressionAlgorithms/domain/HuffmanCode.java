@@ -22,7 +22,7 @@ public class HuffmanCode {
         header = "";
         HuffmanNode root = null;
     
-        PriorityQueue<HuffmanNode> queue = initializeQueue(inputStr);
+        MinHeap queue = initializeQueue(inputStr);
        
         while (queue.size() > 1) {
             HuffmanNode left = queue.poll();
@@ -46,11 +46,11 @@ public class HuffmanCode {
     /**
      * Initialize the priority queue for encoding
      * @param inputStr String 
-     * @return PriorityQueue<HuffmanNode>
+     * @return MinHeap
      */
-    private static PriorityQueue<HuffmanNode> initializeQueue(String inputStr) {
+    private static MinHeap initializeQueue(String inputStr) {
         
-        PriorityQueue<HuffmanNode> queue = new PriorityQueue<>();
+        MinHeap queue = new MinHeap();
         
         int[] charFreqs = initializeCharFreqs(inputStr);
                 
