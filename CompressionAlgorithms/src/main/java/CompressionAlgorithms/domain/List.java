@@ -20,6 +20,9 @@ public class List<T> implements Serializable {
      * @param value the value to be added
      */
     public void add(T value) {
+        if (value == null) {
+            return;
+        }
         if (this.size == this.values.length) {
             this.grow();
         }
@@ -34,7 +37,7 @@ public class List<T> implements Serializable {
      */
     public T get(int index) {
         if (index < 0 || index >= this.size) {
-            throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds of [0, " + this.size + "].");
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds");
         }
 
         return this.values[index];
@@ -47,7 +50,7 @@ public class List<T> implements Serializable {
      */
     public T remove(int index) {
         if (index < 0 || index >= this.size) {
-            throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds of [0, " + this.size + "].");
+            throw new ArrayIndexOutOfBoundsException("Index " + index + " out of bounds");
         }
         
         T value = this.values[index];
