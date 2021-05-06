@@ -15,7 +15,7 @@ public class AppService {
    
     /**
      * Compress the selected file with LZW to target file location
-     * @param targetFile 
+     * @param targetFile File
      * @return boolean success of operation
      */
     public boolean compressWithLzw(File targetFile) {
@@ -26,7 +26,7 @@ public class AppService {
             return false;
         }
         List<Byte> compressedContent = Lzw.compress(selectedFileContent);
-        return this.saveLzwEncodingToFile(targetFile, compressedContent);    
+        return this.saveEncodedBytes(targetFile, compressedContent);    
     }
     
    
@@ -39,7 +39,7 @@ public class AppService {
         setActionStatusBusy();
         List<Byte> compressedContent = Io.readBytes(this.selectedFile.getAbsolutePath());
         String decompressedContent = Lzw.decompress(compressedContent);
-        boolean success = Io.saveTextFile(targetFile, decompressedContent);
+        boolean success = Io.writeStringToFile(targetFile, decompressedContent);
         setActionStatusBySuccess(success);
         
         return success;
@@ -47,7 +47,7 @@ public class AppService {
     
     /**
      * Compress the selected file with Huffman Code to target file location
-     * @param targetFile 
+     * @param targetFile File
      * @return boolean success of operation
      */
     public boolean compressWithHff(File targetFile) {
@@ -57,8 +57,8 @@ public class AppService {
             setActionStatusFail();
             return false;
         }
-        List<Character> compressedContent = HuffmanCode.encode(selectedFileContent);
-        return this.saveHuffmanEncodingToFile(targetFile, compressedContent);   
+        List<Byte> compressedContent = HuffmanCode.encode(selectedFileContent);
+        return this.saveEncodedBytes(targetFile, compressedContent);   
     }
     
     /**
@@ -68,39 +68,25 @@ public class AppService {
      */
     public boolean decompressHffFile(File targetFile) {
         this.setActionStatusBusy();
-        String compressedContent = Io.readHffFile(this.selectedFile.getAbsolutePath());
+        List<Byte> compressedContent = Io.readBytes(this.selectedFile.getAbsolutePath());
         String decompressedContent = HuffmanCode.decode(compressedContent);
-        boolean success = Io.saveTextFile(targetFile, decompressedContent);
+        boolean success = Io.writeStringToFile(targetFile, decompressedContent);
         setActionStatusBySuccess(success);
         
         return success;
     }
     
     /**
-     * Save LZW compressed content to file
+     * Save compressed content to given file
      * 
      * @param file File target file 
-     * @param content List<Integer> the group of integers encoded with lzw
+     * @param content List<Byte> the list of encoded bytes
      * @return boolean success
      */
-    private boolean saveLzwEncodingToFile(File file, List<Byte> content) {
-        boolean success = Io.writeBytes(file, content);
+    private boolean saveEncodedBytes(File file, List<Byte> content) {
+        boolean success = Io.writeBytesToFile(file, content);
         setActionStatusBySuccess(success);
         
-        return success;
-    }
-    
-    /**
-     * Save Huffman encoded string to file
-     * 
-     * @param file File target file
-     * @param content List<Character> the Huffman encoded content
-     * @return boolean success
-     */
-    private boolean saveHuffmanEncodingToFile(File file, List<Character> content) {
-        boolean success = Io.writeHuffmanCodeAsBinaryToFile(file, content);
-        setActionStatusBySuccess(success);
-
         return success;
     }
     

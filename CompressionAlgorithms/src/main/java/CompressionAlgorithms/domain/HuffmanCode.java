@@ -1,47 +1,55 @@
 package CompressionAlgorithms.domain;
 
-import java.util.PriorityQueue;
+import CompressionAlgorithms.utils.DataUtils;
 
 /**
  * The Huffman code algorithm
  */
 public class HuffmanCode {
     
-    public static List<Character> encodedContent;
-    public static char sep = '#';
+    public static List<Byte> encodedContent;
+    public static char endOfHeader = '#';
+    private static int buffer;
+    private static int n;
     
     /**
      * Encode a given string with Huffman Code
      * @param inputStr String
      * @return List<Character> encoded content
      */
-    public static List<Character> encode(String inputStr) {
+    public static List<Byte> encode(String inputStr) {
        
         encodedContent = new List<>();
-        HuffmanNode root = null;
 
+        HuffmanNode root = buildHuffmanTree(inputStr);
+    
+        String[] codes = new String[256];
+        buildHuffmanCode(codes, root, "");
+
+        buildHeader(root);
+        encodeInputByHuffmanCode(codes, inputStr);
+   
+        return encodedContent;
+    }
+
+    /**
+     * Build the Huffman tree
+     * @param inputStr String the input string
+     * @return HuffmanNode the Huffman tree
+     */
+    private static HuffmanNode buildHuffmanTree(String inputStr) {
+        
         MinHeap queue = initializeQueue(inputStr);
-
+        
         while (queue.size() > 1) {
             HuffmanNode left = queue.poll();
             HuffmanNode right = queue.poll(); 
             HuffmanNode parent = new HuffmanNode('\0', left.freq + right.freq, left, right);
             queue.add(parent);
         }
-
-        root = queue.poll();
-    
-        String[] code = new String[256];
-        buildHuffmanCode(code, root, "");
-
-        encodeHuffmanNode(root);
-        encodedContent.add(sep);
-
-        encodeInputByHuffmanCode(code, inputStr);
-   
-        return encodedContent;
+        return queue.poll();
     }
-    
+
    
     /**
      * Initialize the priority queue for encoding
@@ -72,10 +80,10 @@ public class HuffmanCode {
         for (char c : inputStr.toCharArray()) {
             charFreqs[c]++;
         }
-        
+
         return charFreqs;
     }
-    
+
     /**
      * Build the Huffman code
      * @param code String[] array of chars as string
@@ -91,90 +99,157 @@ public class HuffmanCode {
         }
     }
     
-    
     /**
-     * Use Huffman code to encode input
-     * @param codes String[] array of string
-     * @param input String input string
+     * Utility method to build the header
+     * @param node HuffmanNode the Huffman tree
      */
-    private static void encodeInputByHuffmanCode(String[] codes, String input) {
-        for (int i = 0; i < input.length(); i++) {
-            String code = codes[input.charAt(i)];
-            for (int j = 0; j < code.length(); j++) {
-                if (code.charAt(j) == '0') {
-                    encodedContent.add('0');
-                } else if (code.charAt(j) == '1') {
-                    encodedContent.add('1');
-                }
-            }
-        }
+    private static void buildHeader(HuffmanNode node) {
+        encodeHuffmanHeader(node);
+        encodedContent.add((byte) endOfHeader);
     }
     
     /**
      * Encode the Huffman tree
      * @param node HuffmanNode the tree to decode
      */
-    private static void encodeHuffmanNode(HuffmanNode node) {
-
+    public static void encodeHuffmanHeader(HuffmanNode node) {
         if (node.isLeaf()) {
-            encodedContent.add(node.value);
+            encodedContent.add((byte) node.value);
             return;
         } 
         
-        encodedContent.add('0');
-        encodeHuffmanNode(node.left);
-        encodeHuffmanNode(node.right);
+        encodedContent.add((byte) '0');
+        encodeHuffmanHeader(node.left);
+        encodeHuffmanHeader(node.right);
     }
     
     /**
+     * Use Huffman code to encode input
+     * @param codes String[] array of Huffman codes
+     * @param input String the input string
+     */
+    private static void encodeInputByHuffmanCode(String[] codes, String input) {
+        for (int i = 0; i < input.length(); i++) {
+            String code = codes[input.charAt(i)];
+            for (int j = 0; j < code.length(); j++) {
+                if (code.charAt(j) == '0') {
+                    addBitToBuffer(0);
+                } else if (code.charAt(j) == '1') {
+                    addBitToBuffer(1);
+                }
+                
+                if (i == input.length() - 1 && j == code.length() - 1 && n < 8) {
+                    clearBuffer();
+                }
+            }
+        }
+    }
+    
+    /**
+     * Add a bit to the buffer
+     * @param bit int 0 or 1
+     */
+    private static void addBitToBuffer(int bit) {     
+        buffer <<= 1;
+        if (bit == 1) {
+            buffer |= 1;
+        }
+        
+        n++;
+        if (n == 8) {
+            clearBuffer();
+        }
+    } 
+    
+    /**
+     * Add the buffer to result list and clear
+     */
+    private static void clearBuffer() {
+        if (n == 0) {
+            return;
+        }
+        if (n > 0) {
+            buffer <<= (8 - n);
+        }
+        encodedContent.add(DataUtils.convertIntToByte(buffer));
+        
+        n = 0;
+        buffer = 0;
+    }
+    
+
+    /**
      * Decode Huffman encoded data
-     * @param encodedStr String encoded string
-     * @param inputNode HuffmanNode the decoded Huffman tree
+     * @param byteList List<Byte> encoded input
      * @return String decoded string
      */
-    public static String decode(String encodedStr) {
+    public static String decode(List<Byte> byteList) {
         
         String result = "";
-        String inputHeader = encodedStr.substring(0, encodedStr.indexOf(sep));
-        String inputBody = encodedStr.substring(encodedStr.indexOf(sep) + 1);
-        HuffmanNode root = readHeader(inputHeader);
+        buffer = 0;
+        n = 0;
+        int endOfHeaderIndex = getEndOfHeaderIndex(byteList);
+        
+        HuffmanNode root = readHeader(byteList, endOfHeaderIndex);
         HuffmanNode current = root;
                 
-        for (int i = 0; i < inputBody.length(); i++) {
-    
-            if (current == null) {
-                break;
-            }
+        for (int i = endOfHeaderIndex + 1; i < byteList.size(); i++) {
+
+            int entry = DataUtils.convertByteToInt(byteList.get(i));
+            String bits = intToBinaryString(entry);
             
-            if (inputBody.charAt(i) == '0') {
-                current = current.left;
-            } else {
-                current = current.right;
+            for (int j = 0; j < 8; j++) {
+                
+                if (current == null) {
+                    break;
+                }
+
+                if (bits.charAt(j) == '0') {
+                    current = current.left;
+                } else {
+                    current = current.right;
+                }
+
+                if (current.isLeaf()) {
+                    result += current.value;
+                    current = root;
+                }
+                
+                if (current == null) {
+                    break;
+                }                
             }
-            
-            if (current.isLeaf()) {
-                result += current.value;
-                current = root;
-            }
-            
-            if (current == null) {
-                break;
-            }
-            
+
         }
         
         return result;
-    }    
+    }   
+    
+    /**
+     * Get the end of header index
+     * @param byteList List<Byte> list of bytes
+     * @return int index
+     */
+    private static int getEndOfHeaderIndex(List<Byte> byteList) {
+        int index = -1;
+        for (int i = 0; i < byteList.size(); i++) {
+            if ((char) DataUtils.convertByteToInt(byteList.get(i)) == '#') {
+                index = i;
+                break;
+            }
+        }
+        return index;
+    }
 
     /**
      * Utility method to decode the header
      * @param header String 
      * @return HuffmanNode
      */
-    private static HuffmanNode readHeader(String header) {
+    private static HuffmanNode readHeader(List<Byte> byteList, int endIndex) {
         List<Character> chars = new List<>();
-        for (int i = header.length() - 1; i >= 0; i--) {
-            chars.add(header.charAt(i));
+        for (int i = endIndex - 1; i >= 0; i--) {
+            chars.add((char) (int) byteList.get(i));
         }
         return decodeTree(chars);
     }
@@ -184,8 +259,7 @@ public class HuffmanCode {
      * @param chars List<Character> input list containing characters
      * @return HuffmanNode
      */
-    private static HuffmanNode decodeTree(List<Character> chars) {
-        
+    private static HuffmanNode decodeTree(List<Character> chars) {    
         if (chars.size() == 0) {
             return null;
         }
@@ -203,4 +277,20 @@ public class HuffmanCode {
         
     }
     
+   /**
+     * Integer to 8 bit string 
+     * @param value int to translate
+     * @return String s
+     */
+    private static String intToBinaryString(int value) {
+        String s = Integer.toBinaryString(value);
+        if (s.length() < 8) {
+            String prefix = "";
+            for (int j = 0; j < (8 - s.length()); j++) {
+                prefix += "0";
+            }
+            s = prefix + s;
+        }
+        return s;
+    }
 }
