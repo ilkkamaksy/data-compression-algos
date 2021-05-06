@@ -101,6 +101,24 @@ public class Io {
         return false;
     }
     
+    public static boolean writeBytes(File file, List<Byte> bytes) {
+        if (file == null || bytes == null) {
+            return false;
+        }
+        
+        try (FileOutputStream outputStream = new FileOutputStream(file)) {
+            for (int i = 0; i < bytes.size(); i++) {       
+                outputStream.write(bytes.get(i));    
+            }
+            outputStream.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+    
    
     /**
      * Save a string as binary to a file
@@ -193,17 +211,13 @@ public class Io {
      * @param fileName String full path to file
      * @return List<Integer> LZW encoded content
      */
-    public static List<Integer> readLzwFile(String fileName) {
+    public static List<Byte> readBytes(String fileName) {
         
         try {
             byte[] byteTable = Files.readAllBytes(Paths.get(fileName));
-            List<Integer> fileContent = new List<>();
-            for (int i = 0; i < byteTable.length - 1; i = i + 2) {
-                byte[] entry = {
-                    byteTable[i], 
-                    byteTable[i + 1]
-                };
-                fileContent.add(DataUtils.convert2BytesToInt(entry));
+            List<Byte> fileContent = new List<>();
+            for (int i = 0; i < byteTable.length; i++) {
+                fileContent.add(byteTable[i]);
             }
             
             return fileContent;

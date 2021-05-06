@@ -1,5 +1,7 @@
 package CompressionAlgorithms.domain;
 
+import CompressionAlgorithms.utils.DataUtils;
+
 /**
  * The Lempel Ziv Welch algorithm 
  */
@@ -11,9 +13,9 @@ public class Lzw {
      * @param source String to compress
      * @return compressed String 
      */
-    public static List<Integer> compress(String source) {   
+    public static List<Byte> compress(String source) {   
         HashTable<String, Integer> dictionary = initializeCompressionDictionary();
-        List<Integer> compressed = compressStringByDictionary(source, dictionary);
+        List<Byte> compressed = compressStringByDictionary(source, dictionary);
         return compressed;
     }
     
@@ -23,7 +25,7 @@ public class Lzw {
      * @param compressedContent List<Integer> compressed content
      * @return extracted String
      */
-    public static String decompress(List<Integer> compressedContent) {
+    public static String decompress(List<Byte> compressedContent) {
         HashTable<Integer, String> dictionary = initializeDecompressionDictionary();
         String result = decompressByDictionary(dictionary, compressedContent);
         return result;
@@ -61,48 +63,63 @@ public class Lzw {
      * @param dictionary HashTable<String, Integer> dictionary
      * @return List<Integer>
      */
-    private static List<Integer> compressStringByDictionary(String uncompressedString, HashTable<String, Integer> dictionary) {
+    private static List<Byte> compressStringByDictionary(String uncompressedString, HashTable<String, Integer> dictionary) {
         int dictSize = dictionary.size();
         String w = "";
-        List<Integer> result = new List<>();
+        List<Byte> byteList = new List<>();
         for (char character: uncompressedString.toCharArray()) {
             String wc = w + character;
             if (dictionary.containsKey(wc)) {
                 w = wc;
             } else {
-                result.add(dictionary.get(w));
+                addToByteList(dictionary.get(w), byteList);
                 dictionary.put(wc, dictSize++);
                 w = "" + character;
             }
         }
         
         if (!w.isEmpty()) {
-            result.add(dictionary.get(w));
+            addToByteList(dictionary.get(w), byteList);
         }
             
-        return result;
+        return byteList;
+    }
+    
+    private static void addToByteList(Integer value, List<Byte> byteList) {
+        byte[] bytes = DataUtils.convertIntTo2Bytes(value);
+        byteList.add(bytes[0]);
+        byteList.add(bytes[1]);
     }
     
     /**
      * Decompress compressed content by given dictionary
      * @param dictionary HashTable<Integer, String> 
-     * @param compressedContent List<Integer> 
+     * @param byteList List<Integer> 
      * @return String
      */
-    private static String decompressByDictionary(HashTable<Integer, String> dictionary, List<Integer> compressedContent) {
-        if (compressedContent == null) {
+    private static String decompressByDictionary(HashTable<Integer, String> dictionary, List<Byte> byteList) {
+        if (byteList == null) {
             return null;
         }
-        if (compressedContent.size() == 0) {
+        if (byteList.size() == 0) {
             return null;
         }
         
         int dictSize = dictionary.size();
-        String w = "" + (char) (int) compressedContent.remove(0);
+        byte[] firstBytes = {
+            byteList.remove(0),
+            byteList.remove(0)
+        };
+        
+        String w = "" + (char) DataUtils.convert2BytesToInt(firstBytes);
         String result = w;
         
-        for (int i = 0; i < compressedContent.size(); i++) {
-            int entry = compressedContent.get(i);
+        for (int i = 0; i < byteList.size() - 1; i = i + 2) {
+            byte[] bytes = {
+                byteList.get(i),
+                byteList.get(i + 1)
+            };
+            int entry = DataUtils.convert2BytesToInt(bytes);
             String text = "";
 
             if (dictionary.containsKey(entry)) {
@@ -120,5 +137,5 @@ public class Lzw {
         }
         
         return result;
-    }
+    }    
 }

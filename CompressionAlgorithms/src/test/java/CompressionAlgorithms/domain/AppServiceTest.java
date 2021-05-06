@@ -52,11 +52,11 @@ public class AppServiceTest {
         assertNotNull(this.appService.getSelectedFile());
          
         mockStatic(Lzw.class);
-        List<Integer> mockList = new List<>();
+        List<Byte> mockList = new List<>();
         when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);
-        when(Io.writeIntegersAsBinaryToFile(targetFile, mockList)).thenReturn(true);
+        when(Io.writeBytes(targetFile, mockList)).thenReturn(true);
         when(Io.readFileContent(this.appService.getSelectedFile().getAbsolutePath())).thenReturn(this.testFileContent);
         
         boolean result = appService.compressWithLzw(targetFile);
@@ -74,7 +74,7 @@ public class AppServiceTest {
         File targetFile = new File("./targetFile.txt");
         
         mockStatic(Lzw.class);
-        List<Integer> mockList = new List<>();
+        List<Byte> mockList = new List<>();
         when(Lzw.compress(this.testFileContent)).thenReturn(mockList);
         
         mockStatic(Io.class);
@@ -95,7 +95,7 @@ public class AppServiceTest {
         File targetFile = new File("./targetFile.txt");
         
         mockStatic(Lzw.class);
-        List<Integer> mockList = new List<>();
+        List<Byte> mockList = new List<>();
         when(Lzw.decompress(mockList)).thenReturn("");
         
         mockStatic(Io.class);
@@ -117,11 +117,11 @@ public class AppServiceTest {
         appService.setSelectedFile(targetFile);
         
         mockStatic(Lzw.class);
-        List<Integer> mockList = new List<>();
+        List<Byte> mockList = new List<>();
         when(Lzw.decompress(mockList)).thenReturn("success");
         
         mockStatic(Io.class);
-        when(Io.readLzwFile(targetFile.getAbsolutePath())).thenReturn(mockList);
+        when(Io.readBytes(targetFile.getAbsolutePath())).thenReturn(mockList);
         when(Io.saveTextFile(targetFile, "success")).thenReturn(true);
         
         boolean success = appService.decompressLzwFile(targetFile);

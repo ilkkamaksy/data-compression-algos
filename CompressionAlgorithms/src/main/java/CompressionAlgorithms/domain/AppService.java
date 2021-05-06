@@ -25,7 +25,7 @@ public class AppService {
             setActionStatusFail();
             return false;
         }
-        List<Integer> compressedContent = Lzw.compress(selectedFileContent);
+        List<Byte> compressedContent = Lzw.compress(selectedFileContent);
         return this.saveLzwEncodingToFile(targetFile, compressedContent);    
     }
     
@@ -37,7 +37,7 @@ public class AppService {
      */
     public boolean decompressLzwFile(File targetFile) {
         setActionStatusBusy();
-        List<Integer> compressedContent = Io.readLzwFile(this.selectedFile.getAbsolutePath());
+        List<Byte> compressedContent = Io.readBytes(this.selectedFile.getAbsolutePath());
         String decompressedContent = Lzw.decompress(compressedContent);
         boolean success = Io.saveTextFile(targetFile, decompressedContent);
         setActionStatusBySuccess(success);
@@ -79,12 +79,12 @@ public class AppService {
     /**
      * Save LZW compressed content to file
      * 
-     * @param file File target file
+     * @param file File target file 
      * @param content List<Integer> the group of integers encoded with lzw
      * @return boolean success
      */
-    private boolean saveLzwEncodingToFile(File file, List<Integer> content) {
-        boolean success = Io.writeIntegersAsBinaryToFile(file, content);
+    private boolean saveLzwEncodingToFile(File file, List<Byte> content) {
+        boolean success = Io.writeBytes(file, content);
         setActionStatusBySuccess(success);
         
         return success;
