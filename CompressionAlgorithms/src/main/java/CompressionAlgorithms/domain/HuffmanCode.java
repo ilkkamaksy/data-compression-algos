@@ -11,12 +11,11 @@ public class HuffmanCode {
     public static char endOfHeader = '#';
     private static int buffer;
     private static int n;
-    private static int bitCount;
     
     /**
      * Encode a given string with Huffman Code
      * @param inputStr String
-     * @return List<Character> encoded content
+     * @return List<Byte> encoded content
      */
     public static List<Byte> encode(String inputStr) {
        
