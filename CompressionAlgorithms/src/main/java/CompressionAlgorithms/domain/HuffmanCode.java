@@ -11,6 +11,7 @@ public class HuffmanCode {
     public static char endOfHeader = '#';
     private static int buffer;
     private static int n;
+    private static int bitCount;
     
     /**
      * Encode a given string with Huffman Code
@@ -28,7 +29,11 @@ public class HuffmanCode {
 
         buildHeader(root);
         encodeInputByHuffmanCode(codes, inputStr);
-   
+        
+        for (int i = 0; i < encodedContent.size(); i++) {
+            String foo = Integer.toBinaryString(encodedContent.get(i));
+        }
+        
         return encodedContent;
     }
 
@@ -105,7 +110,7 @@ public class HuffmanCode {
      */
     private static void buildHeader(HuffmanNode node) {
         encodeHuffmanHeader(node);
-        encodedContent.add((byte) endOfHeader);
+        encodedContent.add((byte) endOfHeader);     // add the end of header 
     }
     
     /**
@@ -132,14 +137,22 @@ public class HuffmanCode {
         for (int i = 0; i < input.length(); i++) {
             String code = codes[input.charAt(i)];
             for (int j = 0; j < code.length(); j++) {
+               
                 if (code.charAt(j) == '0') {
                     addBitToBuffer(0);
                 } else if (code.charAt(j) == '1') {
                     addBitToBuffer(1);
                 }
                 
-                if (i == input.length() - 1 && j == code.length() - 1 && n < 8) {
-                    clearBuffer();
+                // If the bitcount of the last item is 0 < x < 8, add 0 to the end, else 1. Value 1 = 8 significant bits
+                if (i == input.length() - 1 && j == code.length() - 1) {
+                    if (n > 0 && n < 8) {
+                        clearBuffer();
+                        encodedContent.add((byte) 0);
+                    } else {
+                        encodedContent.add((byte) 1);
+                    }
+                    
                 }
             }
         }
@@ -154,7 +167,7 @@ public class HuffmanCode {
         if (bit == 1) {
             buffer |= 1;
         }
-        
+       
         n++;
         if (n == 8) {
             clearBuffer();
@@ -167,9 +180,6 @@ public class HuffmanCode {
     private static void clearBuffer() {
         if (n == 0) {
             return;
-        }
-        if (n > 0) {
-            buffer <<= (8 - n);
         }
         encodedContent.add(DataUtils.convertIntToByte(buffer));
         
@@ -186,19 +196,23 @@ public class HuffmanCode {
     public static String decode(List<Byte> byteList) {
         
         String result = "";
-        buffer = 0;
-        n = 0;
+        
         int endOfHeaderIndex = getEndOfHeaderIndex(byteList);
         
         HuffmanNode root = readHeader(byteList, endOfHeaderIndex);
         HuffmanNode current = root;
                 
-        for (int i = endOfHeaderIndex + 1; i < byteList.size(); i++) {
+        for (int i = endOfHeaderIndex + 1; i < byteList.size() - 1; i++) {
 
             int entry = DataUtils.convertByteToInt(byteList.get(i));
             String bits = intToBinaryString(entry);
             
-            for (int j = 0; j < 8; j++) {
+            // If the bitcount of the last entry is not 8, ignore the extra bits
+            if (i == byteList.size() - 2 && byteList.get(byteList.size() - 1) == 0) {
+                bits = Integer.toBinaryString(entry);
+            }
+            
+            for (int j = 0; j < bits.length(); j++) {
                 
                 if (current == null) {
                     break;
@@ -276,7 +290,7 @@ public class HuffmanCode {
         return new HuffmanNode('\0', 1, left, right); 
         
     }
-    
+   
    /**
      * Integer to 8 bit string 
      * @param value int to translate
