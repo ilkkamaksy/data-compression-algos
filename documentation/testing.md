@@ -8,6 +8,10 @@ Overall, the size of Huffman encoded data is consistently about 60 % of the inpu
 
 As to the speed of execution, my goal was to reach O(n log n) time complexity with both Huffman encoding and Lempel Ziv Welch compression. 
 
+The time complexity for my Huffman implementation is O(n log n). I am using a min heap data structure to organize the Huffman nodes by their frequencies (which are essentially Huffman trees). Each iteration requires O(log n) to determine the node with the smallest frequency. Additionally, there are O(n) iterations, one for each item. 
+
+The time complexity for my LZW decoding should be in fact O(n), as each search in a fixed size dictionary is technically speaking O(1) (max 256 comparisons). However, I am storing the dictionary in a hash table, where the size of the dictionary and the size of the strings it contains may have negative effects on memory usage and speed of execution. 
+
 We can see in the tables below that the performance of Huffman encoding is significantly and consistently superior to LZW. With 500 kb Huffman is almost 5 times faster than LZW. 
 
 For decoding, my implementation of Huffman decoding clearly does not perform well. LZW decoding is consistently much, much faster.
