@@ -1,5 +1,6 @@
 package CompressionAlgorithms;
 
+import CompressionAlgorithms.metrics.Compare;
 import CompressionAlgorithms.ui.Launcher;
 
 public class Main {
@@ -9,8 +10,17 @@ public class Main {
      */
     public static void main(String[] args) {        
         
-        Launcher.run(args); 
+        boolean testMode = false;
+        for (String arg : args) {
+            if (arg.equals("compare")) {
+                Compare.run();
+                return;
+            }
+        }
+       
+        Launcher.run(args);     
         
+
     }
     
 }
