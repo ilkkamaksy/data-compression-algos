@@ -6,4 +6,5 @@
 
 <suppressions>
     <suppress files="CompressionAlgorithms.ui.*" checks="[a-zA-Z0-9]*"/>
+    <suppress files="CompressionAlgorithms.metrics.*" checks="[a-zA-Z0-9]*"/>
 </suppressions>
