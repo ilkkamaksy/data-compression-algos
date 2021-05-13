@@ -76,7 +76,7 @@ public class Compare {
             start = System.nanoTime();
             String decoded = HuffmanCode.decode(encoded);
             
-            assert(decoded.equals(input));
+            assert decoded.equals(input);
             
             end = System.nanoTime();
             long decodeTime = TimeUnit.NANOSECONDS.toMillis(end - start);
@@ -110,7 +110,7 @@ public class Compare {
             start = System.nanoTime();
             String decoded = Lzw.decompress(encoded);
             
-            assert(decoded.equals(input));
+            assert decoded.equals(input);
             
             end = System.nanoTime();
             long decodeTime = TimeUnit.NANOSECONDS.toMillis(end - start);
