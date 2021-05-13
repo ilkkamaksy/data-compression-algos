@@ -4,7 +4,6 @@ import CompressionAlgorithms.domain.HuffmanCode;
 import CompressionAlgorithms.domain.Lzw;
 import CompressionAlgorithms.domain.List;
 import CompressionAlgorithms.io.Io;
-import java.io.File;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,7 +36,7 @@ public class Compare {
             getLzwMetrics(slice);    
         }
         
-        for (int i = 1; i <= 4; i++) {
+        for (int i = 1; i <= 5; i++) {
             String slice = sliceInput(input, i * 100000);
             getLzwMetrics(slice);    
         }
