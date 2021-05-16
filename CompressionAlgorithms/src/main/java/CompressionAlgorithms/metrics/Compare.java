@@ -24,7 +24,7 @@ public class Compare {
             getHuffmanMetrics(slice);    
         }
         
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 2; i++) {
             String slice = sliceInput(input, i * 100000);
             getHuffmanMetrics(slice);    
         }
@@ -36,7 +36,7 @@ public class Compare {
             getLzwMetrics(slice);    
         }
         
-        for (int i = 1; i <= 5; i++) {
+        for (int i = 1; i <= 2; i++) {
             String slice = sliceInput(input, i * 100000);
             getLzwMetrics(slice);    
         }
