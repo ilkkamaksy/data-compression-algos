@@ -1,16 +1,16 @@
 # Performance testing
 
-The performance of the algorithms was tested with strings of text scaling up in size from 10 kb to 500 kb. These texts were extracted from Homer's Odyssey, which is roughly 600 kb in total size. The encoding and decoding operations were repeated 10 times for each chunk of text and the results were averaged for each set of operations. These average performance metrics are displayed below.
+The performance of the algorithms was tested with strings of text scaling up in size from 10 kb to 600 kb. These texts were extracted from Homer's Odyssey, which is roughly 600 kb in total size. The encoding and decoding operations were repeated 10 times for each chunk of text and the results were averaged for each set of operations. These average performance metrics are displayed below.
 
-As we can see in the tables below, LZW compression is more efficient when the file size increases above 50 kb. Huffman does a better job with relatively small data (less than 30 kb). It is however worth noting that compression involves some overhead with both algorithms, making the compressed data larger than the source with very small inputs.
+As we can see in the tables below, LZW encoding is more efficient when the file size increases above 50 kb. Huffman does a better job with relatively small data (less than 30 kb). It is also worth noting that LZW compression involves some overhead which makes the encoded data larger than the source with very small inputs.
 
-Overall, the size of Huffman encoded data is consistently about 60 % of the input size, but LZW gains increasingly better results as the input size grows. With 600 kb, LZW compressed data is only 38 % of input size. 
+Overall, the size of Huffman encoded data is consistently about 60 % of the input size, but LZW gains increasingly better results as the input size grows. With 600 kb, LZW encoded data is only 38 % of input size. 
 
 As to the speed of execution, my goal was to reach O(n log n) time complexity with both Huffman encoding and Lempel Ziv Welch compression. 
 
 The time complexity for my Huffman implementation is O(n log n). I am using a min heap data structure to organize the Huffman nodes by their frequencies (which are essentially Huffman trees). Each iteration requires O(log n) to determine the node with the smallest frequency. Additionally, there are O(n) iterations, one for each item. 
 
-The time complexity for my LZW decoding should be in fact O(n), as each search in a fixed size dictionary is technically speaking O(1) (max 256 comparisons). However, I am storing the dictionary in a hash table, where the size of the dictionary and the size of the strings it contains may have negative effects on memory usage and speed of execution. 
+The time complexity for my LZW decoding should be also O(n log n), as encoding and decoding involves searching the dictionary repeatedly. However, I am storing the dictionary in a hash table where the size of the dictionary and the size of the strings it contains may have negative effects on memory usage and on the speed of execution. 
 
 We can see in the tables below that the performance of Huffman encoding is significantly and consistently superior to LZW. With 500 kb Huffman is almost 5 times faster than LZW. 
 
