@@ -26,6 +26,12 @@ Run the app with
 
 `./gradlew run`
 
+## Performance tests
+
+Run the performance tests with
+
+`./gradlew run --args="compare"`
+
 ## Testing
 
 Run tests with

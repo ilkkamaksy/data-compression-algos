@@ -14,7 +14,7 @@ public class Compare {
     
     public static void run() {
         
-        String fileName = "../TestData/alku.txt";
+        String fileName = "../TestData/testdata.txt";
         String input = Io.readFileContent(fileName);
         
         System.out.println("\n********** Huffman code results ********** \n");
@@ -73,10 +73,8 @@ public class Compare {
 
             // measure decoding time
             start = System.nanoTime();
-            String decoded = HuffmanCode.decode(encoded);
-            
-            assert decoded.equals(input);
-            
+            HuffmanCode.decode(encoded);
+
             end = System.nanoTime();
             long decodeTime = TimeUnit.NANOSECONDS.toMillis(end - start);
             
@@ -108,9 +106,7 @@ public class Compare {
             // measure decoding time
             start = System.nanoTime();
             String decoded = Lzw.decompress(encoded);
-            
-            assert decoded.equals(input);
-            
+
             end = System.nanoTime();
             long decodeTime = TimeUnit.NANOSECONDS.toMillis(end - start);
             
