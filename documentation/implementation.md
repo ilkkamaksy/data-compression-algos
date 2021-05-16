@@ -24,4 +24,6 @@ LZW starts by building a dictionary of 256 characters into a sequential hash tab
 
 The LZW decoding is done by reading the numeric values in the encoded input byte array and using those values as index keys to the dictionary. The values in matching indexes are then concatenated to the current working string which is also added to the dictionary, rebuilding the dictionary. The current working string is taken as the decoded end result and the process repeats. 
 
+The maximum dictionary size is set to 65 536. The dictionary is reset once the limit has been reached in order to avoid unexpected results. 
+
 The time complexity for my LZW decoding should be also O(n log n), as encoding and decoding involves searching the dictionary repeatedly. However, I am storing the dictionary in a hash table where the size of the dictionary and the size of the strings it contains may have negative effects on memory usage and on the speed of execution. 
