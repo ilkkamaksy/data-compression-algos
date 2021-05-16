@@ -6,6 +6,8 @@ Run the app with
 
 `./gradlew run`
 
+You can use it with the text files and compressed files in the TestData folder.
+
 ### Compressing a file
 
 Select a file to compress by first clicking "open a file...". Then choose to encode with either LZW or Huffman.
