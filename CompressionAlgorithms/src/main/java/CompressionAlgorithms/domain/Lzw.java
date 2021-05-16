@@ -7,6 +7,7 @@ import CompressionAlgorithms.utils.DataUtils;
  */
 public class Lzw {
     
+    private static int initialDictSize = 256;
     private static int maxDictSize = 65536;
         
     /**
@@ -40,7 +41,7 @@ public class Lzw {
      */
     private static HashTable<String, Integer> initializeCompressionDictionary() {
         HashTable<String, Integer> dictionary = new HashTable<>();
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < initialDictSize; i++) {
             dictionary.put("" + (char) i, i);
         }
         return dictionary;
@@ -53,7 +54,7 @@ public class Lzw {
      */
     private static HashTable<Integer, String> initializeDecompressionDictionary() {
         HashTable<Integer, String> dictionary = new HashTable<>();
-        for (int i = 0; i < 256; i++) {
+        for (int i = 0; i < initialDictSize; i++) {
             dictionary.put(i, "" + (char) i);
         }
         return dictionary;
@@ -82,6 +83,7 @@ public class Lzw {
             // If the dictionary becomes full it ceases to work properly, so flush the dictionary
             if (dictSize >= maxDictSize) {
                 dictionary = initializeCompressionDictionary();
+                dictSize = initialDictSize;
             }
         }
         
@@ -144,6 +146,7 @@ public class Lzw {
             // If the dictionary becomes full it ceases to work properly, so flush the dictionary
             if (dictSize >= maxDictSize) {
                 dictionary = initializeDecompressionDictionary();
+                dictSize = initialDictSize;
             }
             
         }
