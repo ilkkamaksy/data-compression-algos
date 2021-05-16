@@ -10,7 +10,6 @@ public class Main {
      */
     public static void main(String[] args) {        
         
-        boolean testMode = false;
         for (String arg : args) {
             if (arg.equals("compare")) {
                 Compare.run();
