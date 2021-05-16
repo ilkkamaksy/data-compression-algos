@@ -26,7 +26,7 @@ Run the app with
 
 `./gradlew run`
 
-You can use it with the text files and compressed files in the TestData folder.
+You can try it out using the text files in the TestData folder.
 
 ## Performance tests
 
