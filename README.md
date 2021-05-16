@@ -8,7 +8,7 @@ Java implementations of Huffman and Lempel Ziv Welch algorithms.
 
 - [Specifications](/documentation/specs.md)
 - [Testing](/documentation/testing.md)
-- [Implementation](/documentation/implementation)
+- [Implementation](/documentation/implementation.md)
 - [User manual](/documentation/usermanual.md)
 
 ## Viikkoraportit
