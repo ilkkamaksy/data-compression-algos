@@ -6,6 +6,8 @@ import CompressionAlgorithms.utils.DataUtils;
  * The Lempel Ziv Welch algorithm 
  */
 public class Lzw {
+    
+    private static int maxDictSize = 65536;
         
     /**
      * Compresses a given string of text using LZW
@@ -76,6 +78,11 @@ public class Lzw {
                 dictionary.put(wc, dictSize++);
                 w = "" + character;
             }
+            
+            // If the dictionary becomes full it ceases to work properly, so flush the dictionary
+            if (dictSize >= maxDictSize) {
+                dictionary = initializeCompressionDictionary();
+            }
         }
         
         if (!w.isEmpty()) {
@@ -133,6 +140,11 @@ public class Lzw {
             }
             result += text;
             w = text;
+            
+            // If the dictionary becomes full it ceases to work properly, so flush the dictionary
+            if (dictSize >= maxDictSize) {
+                dictionary = initializeDecompressionDictionary();
+            }
             
         }
         
